@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DB_ADAPTER = os.getenv('DB_ADAPTER', 'json')
-DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'customer'))
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'customer'))
 
 # ─── PostgreSQL / Supabase Connection ──────────────────────
 _conn = None

@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from PIL import Image
 from io import BytesIO
 import requests
-import google.generativeai as genai
+from google import genai
 
 # Load environment variables
 load_dotenv()
@@ -16,8 +16,7 @@ load_dotenv()
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+# genai configuration removed, now handled via client instantiation
 
 def connect_redis():
     try:
@@ -33,6 +32,7 @@ from auto_reply import generate_auto_reply
 
 from notification_service import send_staff_notification
 from db_adapter import update_customer_intelligence, save_chat_messages, create_task
+from behavioral_analyzer import analyze_customer_behavior
 
 def process_event(event):
     """
@@ -44,16 +44,53 @@ def process_event(event):
 
     print(f"[Python Worker] Processing event from: {sender_id}")
 
+    # Initialize results
+    intelligence_results = {}
+
     # 1. Reactive Sync
     print(f"[Python Worker] Syncing chat for {sender_id}...")
     sync_result = sync_chat(f"t_{sender_id}")
     messages = sync_result.get('data', []) if sync_result.get('success') else []
     
-    # AI INTELLIGENCE: Analyze Chat Context
-    intelligence_results = {}
-    intel_data = analyze_chat_intelligence(sender_id, messages)
-    if intel_data:
-        intelligence_results['chat'] = intel_data
+    # PHASE 17 & 18: HYBRID TOKEN GUARD (High Intent Real-time + Hourly Batch)
+    msg_count = len(messages)
+    
+    # ⚡ HIGH INTENT (Force Real-time)
+    BUY_INTENT_KEYWORDS = ["ราคา", "โอน", "เลขพัสดุ", "สมัคร", "บัญชี", "กี่บาท", "promotion", "โปร", "ส่วนลด", "สน", "จอง"]
+    latest_text = event.get('message', '').lower()
+    has_buy_intent = any(k in latest_text for k in BUY_INTENT_KEYWORDS)
+    
+    # Logic: 
+    # - Run Intel (Lead Score) every 5 messages or if Buy Intent.
+    # - Run Behavioral (Tags) ONLY if Buy Intent (Otherwise wait for Hourly Batch Auditor).
+    
+    should_run_intel = msg_count <= 1 or msg_count % 5 == 0 or has_buy_intent
+    should_run_behavioral = has_buy_intent # Real-time only for sales. Deep profile is handled hourly.
+
+    # AI INTELLIGENCE: Analyze Chat Context (Lead Score/Intent)
+    intel_data = None
+    if should_run_intel:
+        print(f"[Python AI] Running Intel Analysis for {sender_id}...")
+        intel_data = analyze_chat_intelligence(sender_id, messages)
+        if intel_data:
+            intelligence_results['chat'] = intel_data
+    else:
+        print(f"[Python AI] 🛡️ Skipping Intel Analysis (Token Guard) for {sender_id}")
+
+    # PHASE 16: BEHAVIORAL AI (Deep Tagging & CTA)
+    if should_run_behavioral:
+        print(f"[Python Worker] Running Behavioral Analysis for {sender_id}...")
+        behavioral_data = analyze_customer_behavior(sender_id, messages)
+        if behavioral_data and "error" not in behavioral_data:
+            intelligence_results['behavioral'] = behavioral_data
+            # Update metadata/tags in DB
+            update_customer_intelligence(sender_id, {
+                "behavioral": behavioral_data,
+                "status": behavioral_data.get('customer_status', 'WARM'),
+                "tags": behavioral_data.get('behavioral_tags', [])
+            })
+    else:
+        print(f"[Python Worker] 🛡️ Skipping Behavioral Analysis (Token Guard) for {sender_id}")
 
     # 2. Slip Detection & AI Verification
     attachments = event.get('attachments', [])
@@ -139,7 +176,7 @@ def analyze_chat_intelligence(sender_id, messages):
         return None
 
     try:
-        model = genai.GenerativeModel('gemini-pro')
+        client = genai.Client(api_key=GEMINI_API_KEY)
         
         # Prepare context (last 5 messages)
         chat_text = "\n".join([f"{m.get('from', {}).get('name', 'User')}: {m.get('message', '')}" for m in messages[:5]])
@@ -155,7 +192,10 @@ def analyze_chat_intelligence(sender_id, messages):
         - main_interest: (short string like 'Sushi Course', 'Price Inquiry', etc.)
         """
         
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
         # Clean response text
         clean_json = response.text.replace('```json', '').replace('```', '').strip()
         intelligence = json.loads(clean_json)
@@ -178,7 +218,7 @@ def verify_slip_real(sender_id, image_url):
         return None
 
     try:
-        model = genai.GenerativeModel('gemini-pro-vision')
+        client = genai.Client(api_key=GEMINI_API_KEY)
 
         # Download image
         response = requests.get(image_url)
@@ -194,7 +234,10 @@ def verify_slip_real(sender_id, image_url):
         - is_valid (Boolean - check for standard Bank Layout)
         """
 
-        response = model.generate_content([prompt, img])
+        response = client.models.generate_content(
+            model="gemini-2.0-flash", # gemini-2.0-flash handles multimodal
+            contents=[prompt, img]
+        )
         clean_json = response.text.replace('```json', '').replace('```', '').strip()
         result = json.loads(clean_json)
         

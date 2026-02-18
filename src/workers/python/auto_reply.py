@@ -9,14 +9,13 @@ Handles contextual response generation based on:
 
 import os
 import json
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+# genai configuration removed
 
 # Simplified Course Catalog / FAQ for RAG (Initial Version)
 SCHOOL_KNOWLEDGE = {
@@ -70,7 +69,7 @@ def generate_auto_reply(sender_id, messages, intelligence):
         return None
 
     try:
-        model = genai.GenerativeModel('gemini-pro')
+        client = genai.Client(api_key=GEMINI_API_KEY)
         
         # Build prompt with context
         history_text = "\n".join([f"{m.get('from', {}).get('name', 'User')}: {m.get('message', '')}" for m in messages[:3][::-1]])
@@ -102,7 +101,10 @@ def generate_auto_reply(sender_id, messages, intelligence):
         - End with a question to keep the conversation going.
         """
 
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
         reply_text = response.text.strip()
         
         print(f"[Auto-Reply] Generated for {sender_id}: {reply_text[:50]}...")

@@ -2,6 +2,15 @@
 
 All notable changes to the CRM project will be documented in this file.
 
+## [Unreleased]
+### Added
+- **Phase 18: Hybrid Intelligence**: Implemented Token Guard (Real-time intent detection) and Batch Auditor (Hourly sweep) to optimize costs.
+- **Phase 19: Mega-Batch Intelligence**: Implemented Context Packing, reducing API overhead by 95% by analyzing 20+ chats per call.
+- **Batch Auditor**: New `batch_auditor.py` script for background intelligence synchronization.
+
+### Fixed
+- **Data Persistence**: Fixed `DATA_DIR` pathing errors in Python workers to ensure real customer records are updated.
+
 ## [0.2.0] - 2026-02-18
 
 ### Added
