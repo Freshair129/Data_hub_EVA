@@ -76,20 +76,41 @@ export async function GET() {
                                 conversations.push(targetConv);
                             }
 
-                            // [CROSS-REFERENCE] Always check Profile for Agent to ensure consistency
-                            // (Whether live or local, we want the name from the CRM Profile)
-                            if (!targetConv.agent || targetConv.agent === 'Unassigned') {
-                                try {
-                                    const profilePath = path.join(DATA_DIR, folder, `profile_${folder}.json`);
-                                    if (fs.existsSync(profilePath)) {
-                                        const profileData = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
-                                        const profileAgent = profileData.profile?.agent || profileData.agent;
-                                        if (profileAgent && profileAgent !== 'Unassigned') {
-                                            targetConv.agent = profileAgent;
+                            // [CROSS-REFERENCE] Resolve the Best Profile (Handling Fragmentation)
+                            try {
+                                const primaryProfilePath = path.join(DATA_DIR, folder, `profile_${folder}.json`);
+                                let bestProfile = null;
+
+                                if (fs.existsSync(primaryProfilePath)) {
+                                    bestProfile = JSON.parse(fs.readFileSync(primaryProfilePath, 'utf8'));
+                                }
+
+                                // If profile exists but lacks intelligence, search other folders with same ID
+                                const fbId = bestProfile?.contact_info?.facebook_id || bestProfile?.facebook_id;
+                                if (fbId && (!bestProfile.intelligence?.behavioral)) {
+                                    const otherFolders = fs.readdirSync(DATA_DIR);
+                                    for (const oFolder of otherFolders) {
+                                        if (oFolder === folder) continue;
+                                        const oProfilePath = path.join(DATA_DIR, oFolder, `profile_${oFolder}.json`);
+                                        if (fs.existsSync(oProfilePath)) {
+                                            const oProfile = JSON.parse(fs.readFileSync(oProfilePath, 'utf8'));
+                                            const oFbId = oProfile?.contact_info?.facebook_id || oProfile?.facebook_id;
+                                            if (oFbId === fbId && oProfile.intelligence?.behavioral) {
+                                                bestProfile = oProfile;
+                                                break;
+                                            }
                                         }
                                     }
-                                } catch (pErr) { /* ignore profile read error */ }
-                            }
+                                }
+
+                                if (bestProfile) {
+                                    targetConv.customer = bestProfile;
+                                    const profileAgent = bestProfile.profile?.agent || bestProfile.agent;
+                                    if (profileAgent && profileAgent !== 'Unassigned') {
+                                        targetConv.agent = profileAgent;
+                                    }
+                                }
+                            } catch (pErr) { console.error('Profile resolution error:', pErr); }
                         } catch (e) {
                             console.error(`Failed to parse local chat file ${file}:`, e);
                         }

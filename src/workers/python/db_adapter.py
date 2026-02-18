@@ -74,27 +74,53 @@ def update_customer_intelligence(customer_id, intel_data):
     return update_customer_intelligence_json(customer_id, intel_data)
 
 def update_customer_intelligence_json(customer_id, intel_data):
-    # Find the folder for this customer (handling both MSG- and numeric IDs)
     if not os.path.exists(DATA_DIR): return False
     
+    # 1. Try Direct Match (Case for TVS-CUS IDs or exact folder names)
+    direct_folder = os.path.join(DATA_DIR, str(customer_id))
+    if os.path.exists(direct_folder):
+        profile_path = os.path.join(direct_folder, f"profile_{customer_id}.json")
+        if os.path.exists(profile_path):
+            return _perform_json_update(profile_path, intel_data)
+
+    # 2. Try Scan-and-Match (Case for Facebook IDs or Legacy IDs)
     for folder in os.listdir(DATA_DIR):
-        if str(customer_id).replace('MSG-', '') in folder:
-            profile_path = os.path.join(DATA_DIR, folder, f"profile_{folder}.json")
-            if os.path.exists(profile_path):
-                try:
-                    with open(profile_path, 'r', encoding='utf-8') as f:
-                        profile = json.load(f)
-                    
-                    if 'intelligence' not in profile: profile['intelligence'] = {}
-                    profile['intelligence'].update(intel_data)
-                    profile['intelligence']['last_ai_update'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
-                    
-                    with open(profile_path, 'w', encoding='utf-8') as f:
-                        json.dump(profile, f, indent=4, ensure_ascii=False)
-                    return True
-                except Exception as e:
-                    print(f"[DB/JSON] Error: {e}")
+        folder_path = os.path.join(DATA_DIR, folder)
+        if not os.path.isdir(folder_path): continue
+        
+        # Look for profile_*.json
+        profile_files = [f for f in os.listdir(folder_path) if f.startswith('profile_') and f.endsWith('.json')]
+        if not profile_files: continue
+        
+        profile_path = os.path.join(folder_path, profile_files[0])
+        try:
+            with open(profile_path, 'r', encoding='utf-8') as f:
+                profile = json.load(f)
+            
+            # Match by ID or Facebook ID
+            fb_id = profile.get('contact_info', {}).get('facebook_id') or profile.get('facebook_id')
+            if str(customer_id) == str(fb_id) or str(customer_id).replace('MSG-', '') == str(fb_id):
+                return _perform_json_update(profile_path, intel_data)
+        except Exception:
+            continue
+            
     return False
+
+def _perform_json_update(profile_path, intel_data):
+    try:
+        with open(profile_path, 'r', encoding='utf-8') as f:
+            profile = json.load(f)
+        
+        if 'intelligence' not in profile: profile['intelligence'] = {}
+        profile['intelligence'].update(intel_data)
+        profile['intelligence']['last_ai_update'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+        
+        with open(profile_path, 'w', encoding='utf-8') as f:
+            json.dump(profile, f, indent=4, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"[DB/JSON] Update Error: {e}")
+        return False
 
 # ═══════════════════════════════════════════════════════════
 #  CHATS

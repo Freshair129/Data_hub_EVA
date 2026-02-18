@@ -407,7 +407,16 @@ export default function Home() {
     );
 
 
-    const nextCustomerId = `c${String(customers.length + 1).padStart(3, '0')}`;
+    // Standard IDs (TVS-CUS Stable V7)
+    const currentYearShort = new Date().getFullYear().toString().slice(-2);
+    const maxSerial = customers.reduce((max, c) => {
+        if (c.customer_id && c.customer_id.startsWith(`TVS-CUS-WB-${currentYearShort}-`)) {
+            const num = parseInt(c.customer_id.split('-').pop());
+            return num > max ? num : max;
+        }
+        return max;
+    }, 0);
+    const nextCustomerId = `TVS-CUS-WB-${currentYearShort}-${String(maxSerial + 1).padStart(4, '0')}`;
 
     // Calculate Next Member ID (MEM-YYYY-XXXX)
     const currentYear = new Date().getFullYear();

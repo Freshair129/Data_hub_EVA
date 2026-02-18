@@ -196,15 +196,14 @@ function getAllCustomersFromJSON() {
     );
 
     return folders.map(folder => {
-        const profileFiles = fs.readdirSync(path.join(customerDir, folder))
-            .filter(f => f.startsWith('profile_') && f.endsWith('.json'));
-
-        if (profileFiles.length === 0) return null;
-
         try {
-            const data = JSON.parse(fs.readFileSync(
-                path.join(customerDir, folder, profileFiles[0]), 'utf8'
-            ));
+            const folderPath = path.join(customerDir, folder);
+            const files = fs.readdirSync(folderPath);
+            const profileFile = files.find(f => f.startsWith('profile_') && f.endsWith('.json'));
+
+            if (!profileFile) return null;
+
+            const data = JSON.parse(fs.readFileSync(path.join(folderPath, profileFile), 'utf8'));
             return data;
         } catch (e) {
             console.error(`[DB/JSON] Error reading ${folder}:`, e.message);
@@ -217,14 +216,15 @@ function getCustomerFromJSON(customerId) {
     const customers = getAllCustomersFromJSON();
     return customers.find(c =>
         c.customer_id === customerId ||
-        c.conversation_id === customerId
+        c.conversation_id === customerId ||
+        c.contact_info?.facebook_id === customerId ||
+        c.facebook_id === customerId
     ) || null;
 }
 
 function saveCustomerToJSON(data) {
     const customerId = data.customer_id || data.customerId;
-    const convId = data.conversation_id || `fb_${customerId}`;
-    const folderName = convId;
+    const folderName = customerId; // Always use Customer ID as folder name in V7 Standard
     const customerDir = path.join(DATA_DIR, 'customer', folderName);
 
     if (!fs.existsSync(customerDir)) fs.mkdirSync(customerDir, { recursive: true });

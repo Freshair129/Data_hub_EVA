@@ -21,37 +21,38 @@ export async function GET() {
 
                 if (convRes.ok && convData.data) {
                     for (const conv of convData.data) {
-                        const customer = conv.participants?.data?.find(p => p.id !== PAGE_ID);
-                        if (!customer) continue;
+                        // Standard ID Resolution (TVS-CUS V7)
+                        const allExisting = await getAllCustomers();
+                        let targetCustomer = allExisting.find(c =>
+                            c.contact_info?.facebook_id === customer.id ||
+                            c.facebook_id === customer.id
+                        );
 
-                        const customerId = `MSG-${customer.id}`;
-                        const messages = conv.messages?.data || [];
-                        const hasStaffReply = messages.some(m => m.from.id !== customer.id);
+                        let customerId = targetCustomer?.customer_id;
 
-                        // Get the name of the agent/page from the last staff message
-                        let detectedAgent = 'Unassigned';
-                        if (hasStaffReply) {
-                            const lastStaffMsg = messages.find(m => m.from.id !== customer.id);
-                            if (lastStaffMsg) detectedAgent = lastStaffMsg.from.name;
+                        if (!customerId) {
+                            // Generate new TVS-CUS-FB-26-XXXX
+                            const currentYearShort = new Date().getFullYear().toString().slice(-2);
+                            const fbCustomers = allExisting.filter(c => c.customer_id?.startsWith(`TVS-CUS-FB-${currentYearShort}-`));
+                            const maxSerial = fbCustomers.reduce((max, c) => {
+                                const num = parseInt(c.customer_id.split('-').pop());
+                                return num > max ? num : max;
+                            }, 0);
+                            customerId = `TVS-CUS-FB-${currentYearShort}-${String(maxSerial + 1).padStart(4, '0')}`;
+                            console.log(`[Sync] Assigning new standardized ID: ${customerId} for Facebook User ${customer.id}`);
                         }
-
-                        // Extract Labels from Facebook
-                        const fbLabels = conv.labels?.data?.map(l => l.name) || [];
-
-                        // Load existing profile via Adapter to preserve data
-                        let existing = await getAllCustomers().then(all => all.find(c => c.customer_id === customerId));
 
                         const profileUpdate = {
                             customer_id: customerId,
                             conversation_id: conv.id,
                             profile: {
-                                first_name: existing?.profile?.first_name || customer.name?.split(' ')[0] || 'Facebook',
-                                last_name: existing?.profile?.last_name || customer.name?.split(' ').slice(1).join(' ') || 'User',
-                                status: existing?.profile?.status || 'Active',
-                                membership_tier: existing?.profile?.membership_tier || 'GENERAL',
-                                lifecycle_stage: existing?.profile?.lifecycle_stage || (hasStaffReply ? 'In Progress' : 'New Lead'),
-                                agent: existing?.profile?.agent && existing.profile.agent !== 'Unassigned' ? existing.profile.agent : detectedAgent,
-                                join_date: existing?.profile?.join_date || conv.updated_time || new Date().toISOString()
+                                first_name: targetCustomer?.profile?.first_name || customer.name?.split(' ')[0] || 'Facebook',
+                                last_name: targetCustomer?.profile?.last_name || customer.name?.split(' ').slice(1).join(' ') || 'User',
+                                status: targetCustomer?.profile?.status || 'Active',
+                                membership_tier: targetCustomer?.profile?.membership_tier || 'GENERAL',
+                                lifecycle_stage: targetCustomer?.profile?.lifecycle_stage || (hasStaffReply ? 'In Progress' : 'New Lead'),
+                                agent: targetCustomer?.profile?.agent && targetCustomer.profile.agent !== 'Unassigned' ? targetCustomer.profile.agent : detectedAgent,
+                                join_date: targetCustomer?.profile?.join_date || conv.updated_time || new Date().toISOString()
                             },
                             contact_info: {
                                 facebook: customer.name,
@@ -59,8 +60,8 @@ export async function GET() {
                                 lead_channel: 'Facebook'
                             },
                             intelligence: {
-                                metrics: existing?.intelligence?.metrics || { total_spend: 0, total_order: 0 },
-                                tags: Array.from(new Set([...(existing?.intelligence?.tags || []), 'Facebook Chat', ...fbLabels]))
+                                metrics: targetCustomer?.intelligence?.metrics || { total_spend: 0, total_order: 0 },
+                                tags: Array.from(new Set([...(targetCustomer?.intelligence?.tags || []), 'Facebook Chat', ...fbLabels]))
                             }
                         };
 

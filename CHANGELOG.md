@@ -4,12 +4,15 @@ All notable changes to the CRM project will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- **Phase 18: Hybrid Intelligence**: Implemented Token Guard (Real-time intent detection) and Batch Auditor (Hourly sweep) to optimize costs.
+- **Phase 20: Customer ID Standardization (Stable V7)**: Refactored existing customer IDs to alphabetical-sequential format `TVS-CUS-[CHANNEL]-[YEAR]-[SERIAL]`.
 - **Phase 19: Mega-Batch Intelligence**: Implemented Context Packing, reducing API overhead by 95% by analyzing 20+ chats per call.
-- **Batch Auditor**: New `batch_auditor.py` script for background intelligence synchronization.
+- **Phase 18: Hybrid Intelligence**: Implemented Token Guard (Real-time intent detection) and Batch Auditor (Hourly sweep) to optimize costs.
+- **ADR 007**: Documented the immutable Customer ID standard.
 
 ### Fixed
-- **Data Persistence**: Fixed `DATA_DIR` pathing errors in Python workers to ensure real customer records are updated.
+- **Profile Fragmentation**: Resolved tag visibility issues caused by consolidated profile folders.
+- **Data Persistence**: Fixed `DATA_DIR` pathing errors in Python workers.
+- **Discovery Resolution**: Fixed path resolution in AI product discovery when IDs are fragmented.
 
 ## [0.2.0] - 2026-02-18
 

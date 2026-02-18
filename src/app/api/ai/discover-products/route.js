@@ -31,10 +31,25 @@ export async function GET(request) {
         }
 
         const DATA_DIR = path.join(process.cwd(), '../customer');
-        const convFile = path.join(DATA_DIR, customerId, `conv_${customerId}.json`);
+        let convFile = path.join(DATA_DIR, customerId, `conv_${customerId}.json`);
 
+        // If not found directly (maybe customerId is a Conversation ID), search for it
         if (!fs.existsSync(convFile)) {
-            return NextResponse.json({ success: false, error: 'Conversation history not found' }, { status: 404 });
+            console.log(`[AI] Direct path failed for ${customerId}. Searching...`);
+            const folders = fs.readdirSync(DATA_DIR);
+            let found = false;
+            for (const folder of folders) {
+                const searchPath = path.join(DATA_DIR, folder, 'chathistory', `conv_${customerId}.json`);
+                if (fs.existsSync(searchPath)) {
+                    convFile = searchPath;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                return NextResponse.json({ success: false, error: 'Conversation history not found' }, { status: 404 });
+            }
         }
 
         const convoData = readJsonFile(convFile);
