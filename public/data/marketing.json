@@ -1,0 +1,92 @@
+{
+    "campaigns": [
+        {
+            "name": "Summer Chef Promo",
+            "platform": "Facebook",
+            "status": "Active",
+            "budget": 50000,
+            "spend": 35000,
+            "revenue": 120000,
+            "start": "01 Feb",
+            "end": "28 Feb",
+            "color": "bg-blue-600"
+        },
+        {
+            "name": "Q1 Retargeting",
+            "platform": "Google Ads",
+            "status": "Active",
+            "budget": 30000,
+            "spend": 12000,
+            "revenue": 45000,
+            "start": "15 Jan",
+            "end": "15 Mar",
+            "color": "bg-orange-500"
+        },
+        {
+            "name": "New Branch Awareness",
+            "platform": "TikTok",
+            "status": "Paused",
+            "budget": 20000,
+            "spend": 18000,
+            "revenue": 8000,
+            "start": "01 Jan",
+            "end": "31 Jan",
+            "color": "bg-pink-500"
+        }
+    ],
+    "events": {
+        "upcoming": [
+            {
+                "name": "Openhouse Anuban Suan Dek",
+                "date": "08 Feb 2026",
+                "loc": "Anuban Suan Dek",
+                "status": "Confirmed",
+                "leads": 35,
+                "color": "text-green-500",
+                "dot": "bg-green-500"
+            },
+            {
+                "name": "V-School Fair 2026",
+                "date": "15 Feb 2026",
+                "loc": "V-School Main Branch",
+                "status": "Preparing",
+                "leads": 80,
+                "color": "text-amber-500",
+                "dot": "bg-amber-500"
+            },
+            {
+                "name": "Parent Meeting Q1",
+                "date": "28 Feb 2026",
+                "loc": "Conference Room A",
+                "status": "Planned",
+                "leads": 25,
+                "color": "text-blue-500",
+                "dot": "bg-blue-500"
+            }
+        ],
+        "past": [
+            {
+                "name": "Christmas Fair",
+                "date": "20 Dec 2025",
+                "leads": 65,
+                "reg": 28,
+                "closed": 15,
+                "sales": 125000
+            }
+        ],
+        "stats": {
+            "count": 3,
+            "leads": 89,
+            "sales": 245000
+        }
+    },
+    "financial_config": {
+        "cogs_rate": 0.40,
+        "opex": {
+            "Rent & Utilities": 50000,
+            "Staff Salaries": 150000,
+            "Marketing Base": 20000,
+            "Software & Subs": 5000
+        }
+    }
+}

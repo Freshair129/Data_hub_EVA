@@ -1,0 +1,902 @@
+{
+  "date": "2025-12-12",
+  "account_id": "act_231498665634943",
+  "spend": 1019.7900000000001,
+  "impressions": 9344,
+  "clicks": 344,
+  "reach": 7304,
+  "actions": [
+    {
+      "action_type": "page_engagement",
+      "value": 297
+    },
+    {
+      "action_type": "post_engagement",
+      "value": 290
+    },
+    {
+      "action_type": "video_view",
+      "value": 140
+    },
+    {
+      "action_type": "onsite_conversion.total_messaging_connection",
+      "value": 23
+    },
+    {
+      "action_type": "onsite_conversion.messaging_block",
+      "value": 1
+    },
+    {
+      "action_type": "link_click",
+      "value": 79
+    },
+    {
+      "action_type": "onsite_conversion.messaging_welcome_message_view",
+      "value": 56
+    },
+    {
+      "action_type": "onsite_conversion.post_unlike",
+      "value": 1
+    },
+    {
+      "action_type": "comment",
+      "value": 2
+    },
+    {
+      "action_type": "like",
+      "value": 7
+    },
+    {
+      "action_type": "post_interaction_gross",
+      "value": 41
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+      "value": 11
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+      "value": 10
+    },
+    {
+      "action_type": "post",
+      "value": 10
+    },
+    {
+      "action_type": "onsite_conversion.post_save",
+      "value": 3
+    },
+    {
+      "action_type": "onsite_conversion.post_net_like",
+      "value": 25
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+      "value": 3
+    },
+    {
+      "action_type": "onsite_conversion.post_net_save",
+      "value": 3
+    },
+    {
+      "action_type": "onsite_conversion.messaging_first_reply",
+      "value": 17
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_started_7d",
+      "value": 21
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+      "value": 21
+    },
+    {
+      "action_type": "post_reaction",
+      "value": 26
+    },
+    {
+      "action_type": "photo_view",
+      "value": 30
+    }
+  ],
+  "action_values": [],
+  "campaigns": [
+    {
+      "id": "120213655129810708",
+      "name": "Thevschool_MSG 3",
+      "spend": 202.27,
+      "impressions": 4787,
+      "clicks": 183,
+      "reach": 4442,
+      "actions": [
+        {
+          "action_type": "page_engagement",
+          "value": 102
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 97
+        },
+        {
+          "action_type": "video_view",
+          "value": 18
+        },
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 15
+        },
+        {
+          "action_type": "onsite_conversion.messaging_block",
+          "value": 1
+        },
+        {
+          "action_type": "link_click",
+          "value": 53
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 42
+        },
+        {
+          "action_type": "onsite_conversion.post_unlike",
+          "value": 1
+        },
+        {
+          "action_type": "comment",
+          "value": 2
+        },
+        {
+          "action_type": "like",
+          "value": 5
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 26
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 6
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 6
+        },
+        {
+          "action_type": "post",
+          "value": 6
+        },
+        {
+          "action_type": "onsite_conversion.post_save",
+          "value": 3
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 14
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.post_net_save",
+          "value": 3
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 14
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 15
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 15
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 15
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120215232515640708",
+          "name": "Review K.tine",
+          "adset_id": "120213655129720708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 12.85,
+          "impressions": 43,
+          "clicks": 3,
+          "reach": 38,
+          "actions": [
+            {
+              "action_type": "page_engagement",
+              "value": "18"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "18"
+            },
+            {
+              "action_type": "video_view",
+              "value": "18"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120218195722780708",
+          "name": "ทดลองเรียน",
+          "adset_id": "120213655129720708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 189.21,
+          "impressions": 4741,
+          "clicks": 180,
+          "reach": 4401,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "15"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_block",
+              "value": "1"
+            },
+            {
+              "action_type": "link_click",
+              "value": "53"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "84"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "42"
+            },
+            {
+              "action_type": "onsite_conversion.post_unlike",
+              "value": "1"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "79"
+            },
+            {
+              "action_type": "comment",
+              "value": "2"
+            },
+            {
+              "action_type": "like",
+              "value": "5"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "26"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "6"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "6"
+            },
+            {
+              "action_type": "post",
+              "value": "6"
+            },
+            {
+              "action_type": "onsite_conversion.post_save",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "14"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_save",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "14"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "15"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "15"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "15"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120234487052060708",
+          "name": "ซูชิตลาดแตก",
+          "adset_id": "120213655129780708",
+          "adset_name": "Resturant Owner",
+          "spend": 0.21,
+          "impressions": 3,
+          "clicks": 0,
+          "reach": 3,
+          "actions": [],
+          "action_values": []
+        }
+      ]
+    },
+    {
+      "id": "120232784981690708",
+      "name": "Japanese Course_Msg",
+      "spend": 276.67,
+      "impressions": 1718,
+      "clicks": 59,
+      "reach": 1159,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 4
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 72
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 71
+        },
+        {
+          "action_type": "photo_view",
+          "value": 13
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 2
+        },
+        {
+          "action_type": "video_view",
+          "value": 49
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 4
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 4
+        },
+        {
+          "action_type": "link_click",
+          "value": 5
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 4
+        },
+        {
+          "action_type": "like",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 1
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120233607466740708",
+          "name": "Package Sushi",
+          "adset_id": "120232784981980708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 29.13,
+          "impressions": 66,
+          "clicks": 4,
+          "reach": 55,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "1"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "5"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "5"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "video_view",
+              "value": "2"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120236152962190708",
+          "name": "Full Course",
+          "adset_id": "120232784981680708",
+          "adset_name": "Resturant Owner",
+          "spend": 43.67,
+          "impressions": 304,
+          "clicks": 12,
+          "reach": 247,
+          "actions": [
+            {
+              "action_type": "page_engagement",
+              "value": "4"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "4"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "3"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120236152988520708",
+          "name": "Full Course",
+          "adset_id": "120232784981980708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 203.87,
+          "impressions": 1348,
+          "clicks": 43,
+          "reach": 857,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "2"
+            },
+            {
+              "action_type": "link_click",
+              "value": "5"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "63"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "4"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "62"
+            },
+            {
+              "action_type": "like",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "1"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "9"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "1"
+            },
+            {
+              "action_type": "video_view",
+              "value": "47"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "1"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120238010372030708",
+          "name": "Basic skill",
+          "adset_id": "120232784981950708",
+          "adset_name": "Look a like",
+          "spend": 0,
+          "impressions": 0,
+          "clicks": 0,
+          "reach": 0,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "1"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    },
+    {
+      "id": "120236153177840708",
+      "name": "Probundle Course",
+      "spend": 185.99,
+      "impressions": 1104,
+      "clicks": 40,
+      "reach": 624,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 2
+        },
+        {
+          "action_type": "link_click",
+          "value": 16
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 21
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 5
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 21
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 5
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 1
+        },
+        {
+          "action_type": "post",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 2
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 4
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120236529346450708",
+          "name": "Pro Sushi",
+          "adset_id": "120236153178110708",
+          "adset_name": "Resturant Owner",
+          "spend": 185.99,
+          "impressions": 1104,
+          "clicks": 40,
+          "reach": 624,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "2"
+            },
+            {
+              "action_type": "link_click",
+              "value": "16"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "21"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "5"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "21"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "5"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "post",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "4"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "2"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "4"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    },
+    {
+      "id": "120208886586000708",
+      "name": "Kidcamp",
+      "spend": 354.86,
+      "impressions": 1735,
+      "clicks": 62,
+      "reach": 1079,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 2
+        },
+        {
+          "action_type": "link_click",
+          "value": 5
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 102
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 5
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 101
+        },
+        {
+          "action_type": "like",
+          "value": 1
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 6
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 2
+        },
+        {
+          "action_type": "photo_view",
+          "value": 17
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 2
+        },
+        {
+          "action_type": "post",
+          "value": 3
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 3
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 2
+        },
+        {
+          "action_type": "video_view",
+          "value": 73
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 3
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120238388192260708",
+          "name": "Kids Camp SS2",
+          "adset_id": "120208886586050708",
+          "adset_name": "Kids",
+          "spend": 354.86,
+          "impressions": 1735,
+          "clicks": 62,
+          "reach": 1079,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "2"
+            },
+            {
+              "action_type": "link_click",
+              "value": "5"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "102"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "5"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "101"
+            },
+            {
+              "action_type": "like",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "6"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "2"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "17"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "2"
+            },
+            {
+              "action_type": "post",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "2"
+            },
+            {
+              "action_type": "video_view",
+              "value": "73"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "3"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    }
+  ],
+  "synced_at": "2026-02-18T07:25:56.804Z"
+}

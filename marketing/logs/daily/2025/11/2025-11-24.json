@@ -1,0 +1,995 @@
+{
+  "date": "2025-11-24",
+  "account_id": "act_231498665634943",
+  "spend": 568.55,
+  "impressions": 5892,
+  "clicks": 357,
+  "reach": 4575,
+  "actions": [
+    {
+      "action_type": "page_engagement",
+      "value": 767
+    },
+    {
+      "action_type": "post_engagement",
+      "value": 762
+    },
+    {
+      "action_type": "like",
+      "value": 5
+    },
+    {
+      "action_type": "post_interaction_gross",
+      "value": 50
+    },
+    {
+      "action_type": "photo_view",
+      "value": 8
+    },
+    {
+      "action_type": "onsite_conversion.post_net_like",
+      "value": 35
+    },
+    {
+      "action_type": "post_reaction",
+      "value": 35
+    },
+    {
+      "action_type": "onsite_conversion.total_messaging_connection",
+      "value": 15
+    },
+    {
+      "action_type": "link_click",
+      "value": 109
+    },
+    {
+      "action_type": "onsite_conversion.messaging_welcome_message_view",
+      "value": 47
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+      "value": 12
+    },
+    {
+      "action_type": "post",
+      "value": 6
+    },
+    {
+      "action_type": "onsite_conversion.post_save",
+      "value": 5
+    },
+    {
+      "action_type": "onsite_conversion.post_net_save",
+      "value": 4
+    },
+    {
+      "action_type": "onsite_conversion.messaging_first_reply",
+      "value": 10
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_started_7d",
+      "value": 14
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+      "value": 14
+    },
+    {
+      "action_type": "video_view",
+      "value": 595
+    },
+    {
+      "action_type": "onsite_conversion.lead",
+      "value": 5
+    },
+    {
+      "action_type": "offsite_complete_registration_add_meta_leads",
+      "value": 5
+    },
+    {
+      "action_type": "comment",
+      "value": 4
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+      "value": 10
+    },
+    {
+      "action_type": "offsite_search_add_meta_leads",
+      "value": 5
+    },
+    {
+      "action_type": "onsite_conversion.post_unsave",
+      "value": 1
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+      "value": 5
+    },
+    {
+      "action_type": "onsite_web_lead",
+      "value": 5
+    },
+    {
+      "action_type": "lead",
+      "value": 5
+    },
+    {
+      "action_type": "offsite_content_view_add_meta_leads",
+      "value": 5
+    },
+    {
+      "action_type": "onsite_conversion.lead_grouped",
+      "value": 5
+    },
+    {
+      "action_type": "omni_purchase",
+      "value": 2
+    },
+    {
+      "action_type": "onsite_app_purchase",
+      "value": 2
+    },
+    {
+      "action_type": "onsite_web_app_purchase",
+      "value": 2
+    },
+    {
+      "action_type": "onsite_conversion.purchase",
+      "value": 2
+    },
+    {
+      "action_type": "onsite_web_purchase",
+      "value": 2
+    }
+  ],
+  "action_values": [],
+  "campaigns": [
+    {
+      "id": "120211850132160708",
+      "name": "Chinese Dumpling_Msg",
+      "spend": 176.57999999999998,
+      "impressions": 1168,
+      "clicks": 71,
+      "reach": 803,
+      "actions": [
+        {
+          "action_type": "page_engagement",
+          "value": 333
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 331
+        },
+        {
+          "action_type": "like",
+          "value": 2
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 12
+        },
+        {
+          "action_type": "photo_view",
+          "value": 3
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 8
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 8
+        },
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 2
+        },
+        {
+          "action_type": "link_click",
+          "value": 14
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 7
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 2
+        },
+        {
+          "action_type": "post",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.post_save",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.post_net_save",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 2
+        },
+        {
+          "action_type": "video_view",
+          "value": 302
+        },
+        {
+          "action_type": "onsite_conversion.lead",
+          "value": 1
+        },
+        {
+          "action_type": "offsite_complete_registration_add_meta_leads",
+          "value": 1
+        },
+        {
+          "action_type": "comment",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 1
+        },
+        {
+          "action_type": "offsite_search_add_meta_leads",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.post_unsave",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_web_lead",
+          "value": 1
+        },
+        {
+          "action_type": "lead",
+          "value": 1
+        },
+        {
+          "action_type": "offsite_content_view_add_meta_leads",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.lead_grouped",
+          "value": 1
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120215336957070708",
+          "name": "Dimsum 5 Session",
+          "adset_id": "120211850132190708",
+          "adset_name": "Chinese Cuisine",
+          "spend": 9.74,
+          "impressions": 79,
+          "clicks": 8,
+          "reach": 62,
+          "actions": [
+            {
+              "action_type": "page_engagement",
+              "value": "6"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "5"
+            },
+            {
+              "action_type": "like",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "2"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "2"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "2"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120237205425160708",
+          "name": "Dimsum Clip",
+          "adset_id": "120211850132190708",
+          "adset_name": "Chinese Cuisine",
+          "spend": 40.93,
+          "impressions": 212,
+          "clicks": 7,
+          "reach": 91,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "1"
+            },
+            {
+              "action_type": "link_click",
+              "value": "1"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "33"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "1"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "33"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "post",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_save",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_save",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "video_view",
+              "value": "30"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120237218097540708",
+          "name": "Dimsum Clip 2",
+          "adset_id": "120211850132190708",
+          "adset_name": "Chinese Cuisine",
+          "spend": 125.91,
+          "impressions": 877,
+          "clicks": 56,
+          "reach": 650,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.lead",
+              "value": "1"
+            },
+            {
+              "action_type": "offsite_complete_registration_add_meta_leads",
+              "value": "1"
+            },
+            {
+              "action_type": "link_click",
+              "value": "13"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "294"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "6"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "293"
+            },
+            {
+              "action_type": "comment",
+              "value": "1"
+            },
+            {
+              "action_type": "like",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "8"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "offsite_search_add_meta_leads",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_unsave",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_save",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "6"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_save",
+              "value": "0"
+            },
+            {
+              "action_type": "onsite_web_lead",
+              "value": "1"
+            },
+            {
+              "action_type": "lead",
+              "value": "1"
+            },
+            {
+              "action_type": "offsite_content_view_add_meta_leads",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.lead_grouped",
+              "value": "1"
+            },
+            {
+              "action_type": "video_view",
+              "value": "272"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "6"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    },
+    {
+      "id": "120213655129810708",
+      "name": "Thevschool_MSG 3",
+      "spend": 211.88,
+      "impressions": 3443,
+      "clicks": 201,
+      "reach": 2746,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 10
+        },
+        {
+          "action_type": "onsite_conversion.lead",
+          "value": 4
+        },
+        {
+          "action_type": "offsite_complete_registration_add_meta_leads",
+          "value": 4
+        },
+        {
+          "action_type": "omni_purchase",
+          "value": 2
+        },
+        {
+          "action_type": "link_click",
+          "value": 62
+        },
+        {
+          "action_type": "onsite_app_purchase",
+          "value": 2
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 96
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 29
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 93
+        },
+        {
+          "action_type": "comment",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_web_app_purchase",
+          "value": 2
+        },
+        {
+          "action_type": "like",
+          "value": 3
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 26
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 7
+        },
+        {
+          "action_type": "photo_view",
+          "value": 5
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 7
+        },
+        {
+          "action_type": "onsite_conversion.purchase",
+          "value": 2
+        },
+        {
+          "action_type": "offsite_search_add_meta_leads",
+          "value": 4
+        },
+        {
+          "action_type": "post",
+          "value": 5
+        },
+        {
+          "action_type": "onsite_conversion.post_save",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 17
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_conversion.post_net_save",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_web_lead",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 7
+        },
+        {
+          "action_type": "lead",
+          "value": 4
+        },
+        {
+          "action_type": "offsite_content_view_add_meta_leads",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_web_purchase",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 10
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 10
+        },
+        {
+          "action_type": "onsite_conversion.lead_grouped",
+          "value": 4
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 17
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120218195722780708",
+          "name": "ทดลองเรียน",
+          "adset_id": "120213655129720708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 211.88,
+          "impressions": 3443,
+          "clicks": 201,
+          "reach": 2746,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "10"
+            },
+            {
+              "action_type": "onsite_conversion.lead",
+              "value": "4"
+            },
+            {
+              "action_type": "offsite_complete_registration_add_meta_leads",
+              "value": "4"
+            },
+            {
+              "action_type": "omni_purchase",
+              "value": "2"
+            },
+            {
+              "action_type": "link_click",
+              "value": "62"
+            },
+            {
+              "action_type": "onsite_app_purchase",
+              "value": "2"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "96"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "29"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "93"
+            },
+            {
+              "action_type": "comment",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_web_app_purchase",
+              "value": "2"
+            },
+            {
+              "action_type": "like",
+              "value": "3"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "26"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "7"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "5"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "7"
+            },
+            {
+              "action_type": "onsite_conversion.purchase",
+              "value": "2"
+            },
+            {
+              "action_type": "offsite_search_add_meta_leads",
+              "value": "4"
+            },
+            {
+              "action_type": "post",
+              "value": "5"
+            },
+            {
+              "action_type": "onsite_conversion.post_save",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "17"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_5_message_send",
+              "value": "4"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_save",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_web_lead",
+              "value": "4"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "7"
+            },
+            {
+              "action_type": "lead",
+              "value": "4"
+            },
+            {
+              "action_type": "offsite_content_view_add_meta_leads",
+              "value": "4"
+            },
+            {
+              "action_type": "onsite_web_purchase",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "10"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "10"
+            },
+            {
+              "action_type": "onsite_conversion.lead_grouped",
+              "value": "4"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "17"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    },
+    {
+      "id": "120236153177840708",
+      "name": "Probundle Course",
+      "spend": 180.09,
+      "impressions": 1281,
+      "clicks": 85,
+      "reach": 1026,
+      "actions": [
+        {
+          "action_type": "link_click",
+          "value": 33
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 338
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 11
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 338
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 12
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 10
+        },
+        {
+          "action_type": "video_view",
+          "value": 293
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 10
+        },
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 3
+        },
+        {
+          "action_type": "comment",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 3
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.post_save",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.post_net_save",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 2
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120237610951550708",
+          "name": "Pro Ramen Clip",
+          "adset_id": "120236153178110708",
+          "adset_name": "Resturant Owner",
+          "spend": 41.65,
+          "impressions": 291,
+          "clicks": 18,
+          "reach": 235,
+          "actions": [
+            {
+              "action_type": "link_click",
+              "value": "2"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "58"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "1"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "58"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "3"
+            },
+            {
+              "action_type": "video_view",
+              "value": "53"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "3"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120237611102630708",
+          "name": "Pro Ramen-Clip",
+          "adset_id": "120236153177850708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 138.44,
+          "impressions": 990,
+          "clicks": 67,
+          "reach": 791,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "3"
+            },
+            {
+              "action_type": "link_click",
+              "value": "31"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "280"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "10"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "280"
+            },
+            {
+              "action_type": "comment",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "9"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.post_save",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "7"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_save",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "2"
+            },
+            {
+              "action_type": "video_view",
+              "value": "240"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "7"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    }
+  ],
+  "synced_at": "2026-02-18T07:25:56.792Z"
+}

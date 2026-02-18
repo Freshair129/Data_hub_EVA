@@ -1,0 +1,315 @@
+{
+  "date": "2026-01-16",
+  "account_id": "act_231498665634943",
+  "spend": 265.37,
+  "impressions": 1968,
+  "clicks": 59,
+  "reach": 1143,
+  "actions": [
+    {
+      "action_type": "onsite_conversion.total_messaging_connection",
+      "value": 8
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+      "value": 7
+    },
+    {
+      "action_type": "onsite_conversion.messaging_welcome_message_view",
+      "value": 18
+    },
+    {
+      "action_type": "onsite_conversion.messaging_block",
+      "value": 1
+    },
+    {
+      "action_type": "link_click",
+      "value": 21
+    },
+    {
+      "action_type": "page_engagement",
+      "value": 28
+    },
+    {
+      "action_type": "post_engagement",
+      "value": 27
+    },
+    {
+      "action_type": "like",
+      "value": 1
+    },
+    {
+      "action_type": "post_interaction_gross",
+      "value": 6
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+      "value": 4
+    },
+    {
+      "action_type": "post",
+      "value": 2
+    },
+    {
+      "action_type": "onsite_conversion.post_save",
+      "value": 1
+    },
+    {
+      "action_type": "onsite_conversion.post_net_like",
+      "value": 3
+    },
+    {
+      "action_type": "onsite_conversion.post_net_save",
+      "value": 1
+    },
+    {
+      "action_type": "onsite_conversion.messaging_first_reply",
+      "value": 4
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_started_7d",
+      "value": 6
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+      "value": 7
+    },
+    {
+      "action_type": "post_reaction",
+      "value": 3
+    }
+  ],
+  "action_values": [],
+  "campaigns": [
+    {
+      "id": "120219031036110708",
+      "name": "Korea_MSG",
+      "spend": 0,
+      "impressions": 0,
+      "clicks": 0,
+      "reach": 0,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 1
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120223286409710708",
+          "name": "Korea Multi",
+          "adset_id": "120219031036190708",
+          "adset_name": "Korean",
+          "spend": 0,
+          "impressions": 0,
+          "clicks": 0,
+          "reach": 0,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "1"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    },
+    {
+      "id": "120232784981690708",
+      "name": "Japanese Course_Msg",
+      "spend": 265.37,
+      "impressions": 1968,
+      "clicks": 59,
+      "reach": 1143,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 18
+        },
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 6
+        },
+        {
+          "action_type": "onsite_conversion.messaging_block",
+          "value": 1
+        },
+        {
+          "action_type": "link_click",
+          "value": 21
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 28
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 27
+        },
+        {
+          "action_type": "like",
+          "value": 1
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 6
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 6
+        },
+        {
+          "action_type": "post",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.post_save",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 3
+        },
+        {
+          "action_type": "onsite_conversion.post_net_save",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 6
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 7
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 3
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120239325832990708",
+          "name": "Package 78",
+          "adset_id": "120232784981980708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 0,
+          "impressions": 0,
+          "clicks": 0,
+          "reach": 0,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "1"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120239740735470708",
+          "name": "Package ต่างประเทศ",
+          "adset_id": "120232784981980708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 265.37,
+          "impressions": 1968,
+          "clicks": 59,
+          "reach": 1143,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "6"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_block",
+              "value": "1"
+            },
+            {
+              "action_type": "link_click",
+              "value": "21"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "28"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "17"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "27"
+            },
+            {
+              "action_type": "like",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "6"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+              "value": "4"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "6"
+            },
+            {
+              "action_type": "post",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.post_save",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_save",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "4"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "6"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "7"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "3"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    }
+  ],
+  "synced_at": "2026-02-18T07:25:50.544Z"
+}

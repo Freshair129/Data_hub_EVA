@@ -1,0 +1,452 @@
+{
+  "date": "2026-01-25",
+  "account_id": "act_231498665634943",
+  "spend": 639.81,
+  "impressions": 5321,
+  "clicks": 155,
+  "reach": 3418,
+  "actions": [
+    {
+      "action_type": "onsite_conversion.total_messaging_connection",
+      "value": 7
+    },
+    {
+      "action_type": "link_click",
+      "value": 30
+    },
+    {
+      "action_type": "page_engagement",
+      "value": 94
+    },
+    {
+      "action_type": "onsite_conversion.messaging_welcome_message_view",
+      "value": 28
+    },
+    {
+      "action_type": "post_engagement",
+      "value": 92
+    },
+    {
+      "action_type": "like",
+      "value": 2
+    },
+    {
+      "action_type": "post_interaction_gross",
+      "value": 8
+    },
+    {
+      "action_type": "onsite_conversion.post_net_like",
+      "value": 6
+    },
+    {
+      "action_type": "onsite_conversion.messaging_first_reply",
+      "value": 3
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_started_7d",
+      "value": 5
+    },
+    {
+      "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+      "value": 4
+    },
+    {
+      "action_type": "post_reaction",
+      "value": 6
+    },
+    {
+      "action_type": "photo_view",
+      "value": 22
+    },
+    {
+      "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+      "value": 2
+    },
+    {
+      "action_type": "post",
+      "value": 2
+    },
+    {
+      "action_type": "video_view",
+      "value": 32
+    }
+  ],
+  "action_values": [],
+  "campaigns": [
+    {
+      "id": "120232784981690708",
+      "name": "Japanese Course_Msg",
+      "spend": 510.4,
+      "impressions": 4556,
+      "clicks": 117,
+      "reach": 3001,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 5
+        },
+        {
+          "action_type": "link_click",
+          "value": 24
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 55
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 25
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 53
+        },
+        {
+          "action_type": "like",
+          "value": 2
+        },
+        {
+          "action_type": "post_interaction_gross",
+          "value": 8
+        },
+        {
+          "action_type": "onsite_conversion.post_net_like",
+          "value": 6
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 2
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 4
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 3
+        },
+        {
+          "action_type": "post_reaction",
+          "value": 6
+        },
+        {
+          "action_type": "photo_view",
+          "value": 13
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 1
+        },
+        {
+          "action_type": "post",
+          "value": 2
+        },
+        {
+          "action_type": "video_view",
+          "value": 8
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120239740735470708",
+          "name": "Package ต่างประเทศ",
+          "adset_id": "120232784981980708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 127.84,
+          "impressions": 1079,
+          "clicks": 32,
+          "reach": 779,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "3"
+            },
+            {
+              "action_type": "link_click",
+              "value": "4"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "7"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "7"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "6"
+            },
+            {
+              "action_type": "like",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "2"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "3"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "2"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "2"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120240164691260708",
+          "name": "bundle Jan",
+          "adset_id": "120232784981980708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 108.53,
+          "impressions": 627,
+          "clicks": 25,
+          "reach": 367,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "2"
+            },
+            {
+              "action_type": "link_click",
+              "value": "7"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "26"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "6"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "25"
+            },
+            {
+              "action_type": "like",
+              "value": "1"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "2"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "13"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "post",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "video_view",
+              "value": "3"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "1"
+            }
+          ],
+          "action_values": []
+        },
+        {
+          "id": "120240385073740708",
+          "name": "Basicskill + Basic JPN",
+          "adset_id": "120232784981980708",
+          "adset_name": "Japanese Cuisine",
+          "spend": 274.03,
+          "impressions": 2850,
+          "clicks": 60,
+          "reach": 1855,
+          "actions": [
+            {
+              "action_type": "link_click",
+              "value": "13"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "22"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "12"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "22"
+            },
+            {
+              "action_type": "post_interaction_gross",
+              "value": "4"
+            },
+            {
+              "action_type": "post",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.post_net_like",
+              "value": "3"
+            },
+            {
+              "action_type": "video_view",
+              "value": "5"
+            },
+            {
+              "action_type": "post_reaction",
+              "value": "3"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    },
+    {
+      "id": "120237205663760708",
+      "name": "Dinner",
+      "spend": 129.41,
+      "impressions": 765,
+      "clicks": 38,
+      "reach": 417,
+      "actions": [
+        {
+          "action_type": "onsite_conversion.total_messaging_connection",
+          "value": 2
+        },
+        {
+          "action_type": "link_click",
+          "value": 6
+        },
+        {
+          "action_type": "page_engagement",
+          "value": 39
+        },
+        {
+          "action_type": "onsite_conversion.messaging_welcome_message_view",
+          "value": 3
+        },
+        {
+          "action_type": "post_engagement",
+          "value": 39
+        },
+        {
+          "action_type": "photo_view",
+          "value": 9
+        },
+        {
+          "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_first_reply",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_started_7d",
+          "value": 1
+        },
+        {
+          "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+          "value": 1
+        },
+        {
+          "action_type": "video_view",
+          "value": 24
+        }
+      ],
+      "action_values": [],
+      "ads": [
+        {
+          "id": "120240383655840708",
+          "name": "Shabu",
+          "adset_id": "120237205663780708",
+          "adset_name": "Dinner",
+          "spend": 129.41,
+          "impressions": 765,
+          "clicks": 38,
+          "reach": 417,
+          "actions": [
+            {
+              "action_type": "onsite_conversion.total_messaging_connection",
+              "value": "2"
+            },
+            {
+              "action_type": "link_click",
+              "value": "6"
+            },
+            {
+              "action_type": "page_engagement",
+              "value": "39"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_welcome_message_view",
+              "value": "3"
+            },
+            {
+              "action_type": "post_engagement",
+              "value": "39"
+            },
+            {
+              "action_type": "photo_view",
+              "value": "9"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_first_reply",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_started_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "onsite_conversion.messaging_conversation_replied_7d",
+              "value": "1"
+            },
+            {
+              "action_type": "video_view",
+              "value": "24"
+            }
+          ],
+          "action_values": []
+        }
+      ]
+    }
+  ],
+  "synced_at": "2026-02-18T07:25:43.472Z"
+}
