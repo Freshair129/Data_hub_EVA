@@ -27,6 +27,7 @@ export default function Home() {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
     const [customerViewMode, setCustomerViewMode] = useState('list'); // 'list' or 'detail'
+    const [initialChatCustomerId, setInitialChatCustomerId] = useState(null);
 
     // Auth State
     const [currentUser, setCurrentUser] = useState(null);
@@ -505,6 +506,11 @@ export default function Home() {
                                     setActiveCustomer(c);
                                     setCustomerViewMode('detail');
                                 }}
+                                onGoToChat={(c) => {
+                                    const fbId = c.contact_info?.facebook_id || c.facebook_id || c.customer_id;
+                                    setInitialChatCustomerId(fbId);
+                                    setActiveView('facebook-chat');
+                                }}
                             />
                         ) : activeCustomer && (
                             <CustomerCard
@@ -515,6 +521,11 @@ export default function Home() {
                                 onUpdateInventory={(updatedCustomer) => {
                                     setCustomers(customers.map(c => c.customer_id === updatedCustomer.customer_id ? updatedCustomer : c));
                                     setActiveCustomer(updatedCustomer);
+                                }}
+                                onGoToChat={(c) => {
+                                    const fbId = c.contact_info?.facebook_id || c.facebook_id || c.customer_id;
+                                    setInitialChatCustomerId(fbId);
+                                    setActiveView('facebook-chat');
                                 }}
                             />
                         )}
@@ -565,6 +576,7 @@ export default function Home() {
 
                 {activeView === 'facebook-chat' && (
                     <FacebookChat
+                        initialCustomerId={initialChatCustomerId}
                         onViewCustomer={(customer) => {
                             if (customer) {
                                 const fullCustomer = customers.find(c => c.customer_id === customer.customer_id) || customer;

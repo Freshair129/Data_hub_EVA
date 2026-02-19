@@ -293,10 +293,142 @@ model Campaign {
   startDate     DateTime? @map("start_date")
   endDate       DateTime? @map("end_date")
   
+  // Relations
+  adAccountId   String?   @map("ad_account_id")
+  adAccount     AdAccount? @relation(fields: [adAccountId], references: [id])
+  adSets        AdSet[]
+  
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt      @map("updated_at")
   
   @@map("campaigns")
+}
+
+model AdAccount {
+  id          String   @id @default(cuid())
+  accountId   String   @unique // e.g. "act_231498665634943"
+  name        String
+  currency    String   @default("THB")
+  
+  campaigns   Campaign[]
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  @@map("ad_accounts")
+}
+
+model AdSet {
+  id          String   @id @default(cuid())
+  adSetId     String   @unique @map("ad_set_id") // Facebook AdSet ID
+  name        String
+  status      String   // ACTIVE, PAUSED, ARCHIVED
+  
+  campaignId  String   @map("campaign_id")
+  campaign    Campaign @relation(fields: [campaignId], references: [id])
+  
+  ads         Ad[]
+  
+  // Snapshots
+  dailyBudget Float?   @map("daily_budget")
+  targeting   Json?    @default("{}") // Age, Location, Interests
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  @@map("ad_sets")
+}
+
+model Ad {
+  id          String   @id @default(cuid())
+  adId        String   @unique @map("ad_id") // Facebook Ad ID
+  name        String
+  status      String   // ACTIVE, PAUSED, ARCHIVED, REJECTED
+  
+  adSetId     String   @map("ad_set_id")
+  adSet       AdSet    @relation(fields: [adSetId], references: [id])
+  
+  // Creative Reference
+  creativeId  String?  @map("creative_id")
+  creative    AdCreative? @relation(fields: [creativeId], references: [id])
+  
+  // 🧪 A/B Testing / Experiment Link
+  experimentId String? @map("experiment_id")
+  experiment   Experiment? @relation(fields: [experimentId], references: [id])
+  variantName  String?     @map("variant_name") // e.g. "Control", "Variant A", "Video V1"
+  
+  // Latest Metrics (Snapshot)
+  spend       Float    @default(0)
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  cfr         Float    @default(0) // Conversion Rate
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+  
+  @@index([experimentId])
+  @@map("ads")
+}
+
+model AdCreative {
+  id          String   @id @default(cuid())
+  name        String   // Internal name e.g. "Sushi_Promo_V1_Red_Theme"
+  
+  // Content Components
+  body        String?  // Ad Copy / Primary Text
+  headline    String?
+  imageUrl    String?  @map("image_url")
+  videoUrl    String?  @map("video_url")
+  callToAction String? @map("call_to_action") // LEARN_MORE, MESSAGE_PAGE
+  
+  // Relations
+  ads         Ad[]
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  @@map("ad_creatives")
+}
+
+model Experiment {
+  id          String   @id @default(cuid())
+  name        String   // e.g. "Chef Course Pricing Test Feb 2026"
+  description String?
+  status      String   // PLANNED, RUNNING, CONCLUDED, WINNER_FOUND
+  
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  
+  // Hypothesis & Results
+  hypothesis     String? // "Showing 'Job Guaranteed' increases leads by 20%"
+  winningVariant String? @map("winning_variant") // "Variant B"
+  conclusion     String?
+  
+  // Relations
+  ads         Ad[]     // The specific ads participating in this test
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  @@map("experiments")
+}
+
+// Optional: Daily History for Granular Analysis
+model AdDailyMetric {
+  id          String   @id @default(cuid())
+  adId        String   @map("ad_id")
+  date        DateTime @db.Date
+  
+  spend       Float
+  impressions Int
+  clicks      Int
+  leads       Int
+  purchases   Int
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([adId, date])
+  @@map("ad_daily_metrics")
 }
 
 // ───────────────────────────────────────────────────────────

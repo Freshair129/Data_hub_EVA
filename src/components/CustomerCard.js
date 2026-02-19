@@ -6,7 +6,7 @@ import InventoryPanel from './InventoryPanel';
 import Timeline from './Timeline';
 import SlipVerificationModal from './SlipVerificationModal';
 
-export default function CustomerCard({ customer, customers, onSelectCustomer, currentUser, onUpdateInventory }) {
+export default function CustomerCard({ customer, customers, onSelectCustomer, currentUser, onUpdateInventory, onGoToChat }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false);
 
@@ -215,8 +215,8 @@ export default function CustomerCard({ customer, customers, onSelectCustomer, cu
                                                 <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">AI Intent</span>
                                                 <div className="px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-md border border-blue-500/30 text-[9px] font-black uppercase tracking-tighter shadow-glow-blue flex items-center gap-1">
                                                     <i className={`fas ${intel.intent === 'Purchase' ? 'fa-shopping-cart' :
-                                                            intel.intent === 'Question' ? 'fa-question-circle' :
-                                                                intel.intent === 'Complaint' ? 'fa-exclamation-triangle' : 'fa-comment'
+                                                        intel.intent === 'Question' ? 'fa-question-circle' :
+                                                            intel.intent === 'Complaint' ? 'fa-exclamation-triangle' : 'fa-comment'
                                                         } text-[8px]`}></i>
                                                     {intel.intent || 'Analyzing...'}
                                                 </div>
@@ -386,6 +386,14 @@ export default function CustomerCard({ customer, customers, onSelectCustomer, cu
                                     {isSaving ? <i className="fas fa-spinner animate-spin text-[10px]"></i> : <i className="fas fa-save text-[10px]"></i>}
                                     {isSaving ? 'SAVING...' : 'UPDATE SALES INFO'}
                                 </button>
+
+                                <button
+                                    onClick={() => onGoToChat && onGoToChat(customer)}
+                                    className="w-full bg-[#1877F2]/10 text-[#1877F2] border border-[#1877F2]/30 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#1877F2]/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <i className="fab fa-facebook-messenger"></i>
+                                    OPEN FACEBOOK CHAT
+                                </button>
                             </div>
                         </div>
 
@@ -472,6 +480,6 @@ export default function CustomerCard({ customer, customers, onSelectCustomer, cu
                     onUpdateInventory(updatedCustomer);
                 }}
             />
-        </div >
+        </div>
     );
 }

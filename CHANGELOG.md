@@ -3,6 +3,14 @@
 All notable changes to the CRM project will be documented in this file.
 
 ## [Unreleased]
+
+### Added
+- **Ad Data Schema**: New Prisma models (`Ad`, `AdSet`, `AdCreative`, `Experiment`) for A/B testing support.
+- **Career Courses**: Added "Sushi Career Creation" (4900 THB) and "Ramen Career Creation" (4900 THB) to catalog.
+- **Documentation**: Added ADR 008 (Ad Data Architecture).
+
+### Changed
+- **Task Management**: Refined `task.md` to restart Phase numbering correctly (Phase 23/24).
 ### Added
 - **Phase 20: Customer ID Standardization (Stable V7)**: Refactored existing customer IDs to alphabetical-sequential format `TVS-CUS-[CHANNEL]-[YEAR]-[SERIAL]`.
 - **Phase 19: Mega-Batch Intelligence**: Implemented Context Packing, reducing API overhead by 95% by analyzing 20+ chats per call.

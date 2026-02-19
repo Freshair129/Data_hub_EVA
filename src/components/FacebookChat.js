@@ -2,7 +2,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function FacebookChat({ onViewCustomer }) {
+export default function FacebookChat({ onViewCustomer, initialCustomerId }) {
     const [conversations, setConversations] = useState([]);
     const [messages, setMessages] = useState([]);
     const [selectedConv, setSelectedConv] = useState(null);
@@ -19,6 +19,7 @@ export default function FacebookChat({ onViewCustomer }) {
     const [discoveredProducts, setDiscoveredProducts] = useState([]);
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
+    const initialSelectionRef = useRef(false);
 
     // Initial load: catalog & employees
     useEffect(() => {
@@ -59,6 +60,23 @@ export default function FacebookChat({ onViewCustomer }) {
         }
         return () => clearInterval(interval);
     }, [selectedConv]);
+
+    // Auto-select conversation based on initialCustomerId
+    useEffect(() => {
+        if (initialCustomerId && conversations.length > 0 && !initialSelectionRef.current) {
+            console.log(`[Chat] Attempting auto-selection for ID: ${initialCustomerId}`);
+            const target = conversations.find(c => {
+                const fbId = c.customer?.contact_info?.facebook_id || c.customer?.facebook_id;
+                return c.id === initialCustomerId || fbId === initialCustomerId;
+            });
+
+            if (target) {
+                console.log(`[Chat] Target found: ${target.id}`);
+                setSelectedConv(target);
+                initialSelectionRef.current = true;
+            }
+        }
+    }, [initialCustomerId, conversations]);
 
     // Auto-Sync Background: Trigger full Facebook lead import every 5 minutes
     useEffect(() => {

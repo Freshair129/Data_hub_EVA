@@ -26,6 +26,7 @@ graph TD
 | **Worker Engine** | Python logic, AI, Tasks | Python 3.12 |
 | **Knowledge Base** | Semantic Search (RAG) | JSON Vector Index / Gemini |
 | **Observability** | Error Logging & Auditing | `errorLogger.js` / JSONL |
+| **Ad Engine** | A/B Testing & Ad Delivery | Prisma / Facebook API |
 
 ## 📂 File Structure Summary (Root)
 | Path | Description |
@@ -45,7 +46,9 @@ graph TD
 | `src/workers/python/` | Core logic, AI Processing, Knowledge Base |
 | `src/lib/` | Shared utilities (DB, Queue, Logging) |
 | `prisma/` | Database schema and migrations |
-| `marketing/` | Marketing logs and ROI data |
+| `prisma/` | Database schema (Core + Ad Data) |
+| `marketing/config/` | Ad mapping configurations |
+| `marketing/logs/` | Raw JSON logs from Facebook |
 | `docs/adr/` | Architectural Decision Records |
 
 ## 🛡️ Observability & Reliability

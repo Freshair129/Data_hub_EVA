@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-export default function CustomerList({ customers, onSelectCustomer }) {
+export default function CustomerList({ customers, onSelectCustomer, onGoToChat }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredCustomers = customers.filter(c => {
@@ -74,7 +74,51 @@ export default function CustomerList({ customers, onSelectCustomer }) {
                                 const tier = getTier(c);
                                 return (
                                     <tr key={c.customer_id} className="hover:bg-white/5 transition-all group cursor-pointer" onClick={() => onSelectCustomer(c)}>
-                                        {/* ... existing columns ... */}
+                                        {/* Student Profile */}
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 rounded-2xl bg-[#C9A34E]/10 flex items-center justify-center text-[#C9A34E] font-black shadow-inner">
+                                                    {(c.profile?.first_name || 'C')[0]}
+                                                </div>
+                                                <div>
+                                                    <div className="text-sm font-black text-white group-hover:text-[#C9A34E] transition-colors line-clamp-1">
+                                                        {c.profile?.first_name} {c.profile?.last_name}
+                                                    </div>
+                                                    <div className="flex items-center gap-2 mt-1">
+                                                        <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">{c.profile?.nick_name || 'No Nickname'}</span>
+                                                        <span className="w-1 h-1 rounded-full bg-white/10"></span>
+                                                        <span className="text-[10px] font-mono text-[#C9A34E]/60">{c.profile?.member_id || c.customer_id}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        {/* Membership */}
+                                        <td className="px-8 py-6">
+                                            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border ${tier.color} transition-all`}>
+                                                <i className={`fas ${tier.icon} text-[10px]`}></i>
+                                                <span className="text-[10px] font-black uppercase tracking-widest">{tier.label}</span>
+                                            </div>
+                                        </td>
+
+                                        {/* Financials */}
+                                        <td className="px-8 py-6">
+                                            <div className="space-y-1">
+                                                <div className="text-xs font-black text-white">฿{(c.intelligence?.metrics?.total_spend || 0).toLocaleString()}</div>
+                                                <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Total Spend</div>
+                                            </div>
+                                        </td>
+
+                                        {/* Engagement */}
+                                        <td className="px-8 py-6">
+                                            <div className="space-y-1">
+                                                <div className="flex items-center gap-2">
+                                                    <i className="fas fa-clock text-[10px] text-[#C9A34E]"></i>
+                                                    <span className="text-sm font-black text-white">{c.intelligence?.metrics?.total_learning_hours || 0}h</span>
+                                                </div>
+                                                <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Learning Time</div>
+                                            </div>
+                                        </td>
 
                                         {/* Agent & Status */}
                                         <td className="px-8 py-6">
@@ -84,7 +128,7 @@ export default function CustomerList({ customers, onSelectCustomer }) {
                                                     <span className="text-sm font-black text-white">{c.profile?.agent || 'Unassigned'}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 pl-4">
-                                                    <div className={`w-1.5 h-1.5 rounded-full ${c.status === 'Won / Enrolled' ? 'bg-green-500' : 'bg-[#C9A34E] animte-pulse'}`}></div>
+                                                    <div className={`w-1.5 h-1.5 rounded-full ${c.status === 'Won / Enrolled' ? 'bg-green-500' : 'bg-[#C9A34E] animate-pulse'}`}></div>
                                                     <span className="text-[10px] font-bold text-white/50">{c.status || 'New Lead'}</span>
                                                 </div>
                                             </div>
@@ -99,9 +143,21 @@ export default function CustomerList({ customers, onSelectCustomer }) {
 
                                         {/* Actions */}
                                         <td className="px-8 py-6 text-right">
-                                            <button className="w-10 h-10 rounded-xl bg-white/5 text-white/40 flex items-center justify-center hover:bg-[#C9A34E] hover:text-[#0A1A2F] hover:scale-105 active:scale-95 transition-all shadow-xl">
-                                                <i className="fas fa-chevron-right text-xs"></i>
-                                            </button>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onGoToChat && onGoToChat(c);
+                                                    }}
+                                                    className="w-10 h-10 rounded-xl bg-[#C9A34E]/10 text-[#C9A34E] flex items-center justify-center hover:bg-[#C9A34E] hover:text-[#0A1A2F] transition-all shadow-xl"
+                                                    title="Go to Chat"
+                                                >
+                                                    <i className="fab fa-facebook-messenger text-sm"></i>
+                                                </button>
+                                                <button className="w-10 h-10 rounded-xl bg-white/5 text-white/40 flex items-center justify-center hover:bg-[#C9A34E] hover:text-[#0A1A2F] hover:scale-105 active:scale-95 transition-all shadow-xl">
+                                                    <i className="fas fa-chevron-right text-xs"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 );
