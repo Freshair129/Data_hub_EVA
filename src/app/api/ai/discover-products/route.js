@@ -66,12 +66,34 @@ export async function GET(request) {
         const extracted = await analyst.extractProductsFromChat(messages);
 
         // 3. Match against Catalog
-        const catalogPath = path.join(process.cwd(), 'public/data/catalog.json');
-        const catalog = readJsonFile(catalogPath);
-        const allCatalogItems = [
-            ...(catalog?.packages || []),
-            ...(catalog?.products || [])
-        ];
+        // 3. Match against Catalog (Read from products directory)
+        const productsDir = path.join(process.cwd(), '../products');
+        let allCatalogItems = [];
+
+        if (fs.existsSync(productsDir)) {
+            const packagesDir = path.join(productsDir, 'packages');
+            if (fs.existsSync(packagesDir)) {
+                fs.readdirSync(packagesDir)
+                    .filter(f => f.endsWith('.json'))
+                    .forEach(f => {
+                        try {
+                            const data = JSON.parse(fs.readFileSync(path.join(packagesDir, f), 'utf8'));
+                            allCatalogItems.push(data);
+                        } catch (e) { }
+                    });
+            }
+            const coursesDir = path.join(productsDir, 'courses');
+            if (fs.existsSync(coursesDir)) {
+                fs.readdirSync(coursesDir)
+                    .filter(f => f.endsWith('.json'))
+                    .forEach(f => {
+                        try {
+                            const data = JSON.parse(fs.readFileSync(path.join(coursesDir, f), 'utf8'));
+                            allCatalogItems.push(data);
+                        } catch (e) { }
+                    });
+            }
+        }
 
         const enriched = extracted.map(item => {
             const match = allCatalogItems.find(p =>
@@ -111,14 +133,13 @@ export async function POST(request) {
             return NextResponse.json({ success: false, error: 'Missing product details' }, { status: 400 });
         }
 
-        const catalogPath = path.join(process.cwd(), 'public/data/catalog.json');
-        const catalog = readJsonFile(catalogPath);
+        const productsDir = path.join(process.cwd(), '../products');
 
-        if (!catalog) {
-            return NextResponse.json({ success: false, error: 'Catalog not found' }, { status: 500 });
-        }
+        // Determine file path based on type (assuming product for now as per original code)
+        // Original code pushed to catalog.products. We will write to products/courses/ID.json
+        // NOTE: The original code logic for 'category' defaulting to 'japan' suggests these are courses.
+        // If we want to support packages, we need more logic, but for "product_name" it usually implies a course/menu.
 
-        // Create new ID
         const cleanName = product_name.replace(/[^a-zA-Z0-9]/g, '-').toUpperCase();
         const newId = `TVS-NEW-${cleanName}-${Date.now().toString().slice(-4)}`;
 
@@ -138,11 +159,14 @@ export async function POST(request) {
             }
         };
 
-        // Add to products array
-        catalog.products = catalog.products || [];
-        catalog.products.push(newProduct);
+        const targetDir = path.join(productsDir, 'courses');
+        if (!fs.existsSync(targetDir)) {
+            fs.mkdirSync(targetDir, { recursive: true });
+        }
 
-        fs.writeFileSync(catalogPath, JSON.stringify(catalog, null, 4));
+        const filePath = path.join(targetDir, `${newId}.json`);
+        fs.writeFileSync(filePath, JSON.stringify(newProduct, null, 4));
+
 
         return NextResponse.json({
             success: true,

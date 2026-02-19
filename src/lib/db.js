@@ -17,6 +17,11 @@
 
 import fs from 'fs';
 import path from 'path';
+import pg from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { readCacheList, readCacheEntry } from './cacheSync.js';
+
+const { Pool } = pg;
 
 const DB_ADAPTER = process.env.DB_ADAPTER || 'json';
 const DATA_DIR = path.join(process.cwd(), '..');
@@ -27,9 +32,17 @@ export async function getPrisma() {
     if (!_prisma) {
         try {
             const { PrismaClient } = await import('@prisma/client');
-            _prisma = new PrismaClient();
-            console.log('[DB] Connected via Prisma (PostgreSQL/Supabase)');
+
+            const connectionString = process.env.DATABASE_URL;
+            if (!connectionString) throw new Error('DATABASE_URL is not set');
+
+            const pool = new Pool({ connectionString });
+            const adapter = new PrismaPg(pool);
+
+            _prisma = new PrismaClient({ adapter });
+            console.log('[DB] Connected via Prisma (PostgreSQL/Supabase + Adapter)');
         } catch (e) {
+            console.error('[DB] Prisma Adapter init failed:', e);
             console.warn('[DB] Prisma not available, falling back to JSON:', e.message);
             return null;
         }
@@ -37,33 +50,89 @@ export async function getPrisma() {
     return _prisma;
 }
 
-// ═══════════════════════════════════════════════════════════
-//  CUSTOMERS
-// ═══════════════════════════════════════════════════════════
-
 export async function getAllCustomers() {
     if (DB_ADAPTER === 'prisma') {
         const prisma = await getPrisma();
         if (prisma) {
-            return prisma.customer.findMany({
-                include: { orders: true, inventory: true, timeline: true }
-            });
+            try {
+                return await prisma.customer.findMany({
+                    include: { orders: true, inventory: true, timeline: true, cart: { include: { product: true } } }
+                });
+            } catch (e) {
+                console.warn('[DB] Prisma query failed, falling back to Cache:', e.message);
+            }
         }
     }
-    // JSON Fallback
+
+    // Cache/JSON Fallback using cacheSync
+    const cached = readCacheList('customer');
+    if (cached.length > 0) return cached;
+
+    // Legacy JSON Fallback (data_hub/)
     return getAllCustomersFromJSON();
+}
+
+export async function getChatHistory(customerId) {
+    if (DB_ADAPTER === 'prisma') {
+        const prisma = await getPrisma();
+        if (prisma) {
+            try {
+                return await prisma.conversation.findMany({
+                    where: { customer: { customerId } },
+                    include: { messages: { orderBy: { createdAt: 'desc' }, take: 50 } }
+                });
+            } catch (e) {
+                console.warn('[DB] Prisma chat query failed, falling back to Cache:', e.message);
+            }
+        }
+    }
+    // Cache Fallback
+    const cached = readCacheEntry(`customer/${customerId}/chathistory`, 'all'); // Or specific conv if we knew it
+    if (cached) return cached.conversations || [];
+
+    // Try to list all files in chathistory dir
+    const list = readCacheList(`customer/${customerId}/chathistory`);
+    return list;
 }
 
 export async function getCustomerById(customerId) {
     if (DB_ADAPTER === 'prisma') {
         const prisma = await getPrisma();
         if (prisma) {
-            return prisma.customer.findUnique({
-                where: { customerId },
-                include: { orders: { include: { transactions: true } }, inventory: true, timeline: true }
-            });
+            try {
+                return await prisma.customer.findUnique({
+                    where: { customerId },
+                    include: {
+                        orders: { include: { transactions: true } },
+                        inventory: true,
+                        timeline: true,
+                        cart: { include: { product: true } }
+                    }
+                });
+            } catch (e) {
+                console.warn('[DB] Prisma query failed, falling back to Cache:', e.message);
+            }
         }
     }
+
+    // Cache/JSON Fallback (Split files: profile + wallet + ...)
+    const cachedProfile = readCacheEntry(`customer/${customerId}`, 'profile');
+    if (cachedProfile) {
+        // Enforce same shape as Prisma for UI compatibility
+        const wallet = readCacheEntry(`customer/${customerId}`, 'wallet') || {};
+        const inventory = readCacheEntry(`customer/${customerId}`, 'inventory') || { items: [] };
+        const cart = readCacheEntry(`customer/${customerId}`, 'cart') || { items: [] };
+
+        return {
+            ...cachedProfile,
+            walletBalance: wallet.balance,
+            walletPoints: wallet.points,
+            walletCurrency: wallet.currency,
+            inventory: inventory.items,
+            cart: cart.items
+        };
+    }
+
     return getCustomerFromJSON(customerId);
 }
 
@@ -104,15 +173,131 @@ export async function getEmployeeByEmail(email) {
 }
 
 // ═══════════════════════════════════════════════════════════
+//  SHOPPING CART
+// ═══════════════════════════════════════════════════════════
+
+export async function getCart(customerId) {
+    if (DB_ADAPTER === 'prisma') {
+        const prisma = await getPrisma();
+        if (prisma) {
+            return prisma.cartItem.findMany({
+                where: { customer: { customerId } },
+                include: { product: true }
+            });
+        }
+    }
+    return []; // JSON Fallback (unsupported for now)
+}
+
+export async function upsertCartItem(customerId, productId, quantity) {
+    if (DB_ADAPTER === 'prisma') {
+        const prisma = await getPrisma();
+        if (prisma) {
+            return prisma.cartItem.upsert({
+                where: {
+                    customerId_productId: {
+                        customerId: (await prisma.customer.findUnique({ where: { customerId } }))?.id,
+                        productId: (await prisma.product.findUnique({ where: { productId } }))?.id
+                    }
+                },
+                create: {
+                    customer: { connect: { customerId } },
+                    product: { connect: { productId } },
+                    quantity
+                },
+                update: { quantity }
+            });
+        }
+    }
+    return null;
+}
+
+export async function removeFromCart(customerId, productId) {
+    if (DB_ADAPTER === 'prisma') {
+        const prisma = await getPrisma();
+        if (prisma) {
+            const customer = await prisma.customer.findUnique({ where: { customerId } });
+            const product = await prisma.product.findUnique({ where: { productId } });
+            if (customer && product) {
+                return prisma.cartItem.delete({
+                    where: {
+                        customerId_productId: {
+                            customerId: customer.id,
+                            productId: product.id
+                        }
+                    }
+                });
+            }
+        }
+    }
+    return null;
+}
+
+export async function clearCart(customerId) {
+    if (DB_ADAPTER === 'prisma') {
+        const prisma = await getPrisma();
+        if (prisma) {
+            return prisma.cartItem.deleteMany({
+                where: { customer: { customerId } }
+            });
+        }
+    }
+    return null;
+}
+
+// ═══════════════════════════════════════════════════════════
 //  PRODUCTS
 // ═══════════════════════════════════════════════════════════
 
 export async function getAllProducts() {
     if (DB_ADAPTER === 'prisma') {
         const prisma = await getPrisma();
-        if (prisma) return prisma.product.findMany({ where: { isActive: true } });
+        if (prisma) {
+            try {
+                return await prisma.product.findMany({ where: { isActive: true } });
+            } catch (e) {
+                console.warn('[DB] Prisma product query failed, falling back to Cache:', e.message);
+            }
+        }
     }
+    const cached = readCacheList('products');
+    if (cached.length > 0) return cached;
     return getProductsFromJSON();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MARKETING & ADS
+// ═══════════════════════════════════════════════════════════
+
+export async function getAllCampaigns() {
+    if (DB_ADAPTER === 'prisma') {
+        const prisma = await getPrisma();
+        if (prisma) {
+            try {
+                return await prisma.campaign.findMany({ include: { adSets: true } });
+            } catch (e) {
+                console.warn('[DB] Prisma campaign query failed, falling back to Cache:', e.message);
+            }
+        }
+    }
+    return readCacheList('ads/campaign');
+}
+
+export async function getMarketingSummary() {
+    if (DB_ADAPTER === 'prisma') {
+        const prisma = await getPrisma();
+        if (prisma) {
+            try {
+                const campaigns = await prisma.campaign.findMany();
+                const totalSpend = campaigns.reduce((sum, c) => sum + (c.spend || 0), 0);
+                const totalLeads = await prisma.customer.count({ where: { lifecycleStage: 'Lead' } });
+                return { totalSpend, totalLeads, campaignCount: campaigns.length };
+            } catch (e) {
+                console.warn('[DB] Prisma marketing summary failed, falling back to Cache:', e.message);
+            }
+        }
+    }
+    return readCacheEntry('analytics', 'summary')?.marketing || {};
 }
 
 // ═══════════════════════════════════════════════════════════

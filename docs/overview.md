@@ -1,15 +1,20 @@
-# CRM System Overview
+# V School CRM - System Overview
 
-## Architecture
+## Project Summary
+A comprehensive Customer Relationship Management (CRM) system built with **Next.js** for **V School** (Japanese Culinary Academy). The system provides a 360° view of customer engagement, sales, inventory, and analytics using a high-performance hybrid architecture.
+
+---
+
+## High-Level Architecture
+
 The V-School CRM is built on a hybrid architecture that balances ease of use (JSON Flat Files) with professional reliability (PostgreSQL/Prisma).
 
-### High-Level Component Diagram
 ```mermaid
 graph TD
-    A[Facebook Webhook] --> B[Node.js API Route]
+    A[Facebook Webhook] --> B[Next.js API Route]
     B --> C{DB Adapter}
     C -->|json| D[Local Filesystem]
-    C -->|prisma| E[PostgreSQL / Supabase]
+    C -->|prisma| E[PostgreSQL / Supabase + Adapter]
     B --> F[Redis Queue]
     F --> G[Python Worker]
     G --> H[AI Engine: Gemini]
@@ -17,58 +22,202 @@ graph TD
     G --> J[Logic Integrity Check]
 ```
 
-## Key Modules
-| Component | Responsibility | TECH STACK |
-|-----------|----------------|------------|
-| **Runtime Engine** | Portable execution environment | **Node.js (Local `node_env`)** |
-| **Core API** | Routing, Auth, Webhooks | Next.js (Node.js) |
-| **Data Layer** | Hybrid Adapter (JSON/Prisma) | File IO / Prisma ORM |
-| **Worker Engine** | Python logic, AI, Tasks | Python 3.12 |
-| **Knowledge Base** | Semantic Search (RAG) | JSON Vector Index / Gemini |
-| **Observability** | Error Logging & Auditing | `errorLogger.js` / JSONL |
-| **Ad Engine** | A/B Testing & Ad Delivery | Prisma / Facebook API |
+### Hybrid Architecture (Node.js + Python) 🐍🛡️
 
-## 📂 File Structure Summary (Root)
+The system utilizes a dual-engine approach:
+
+| Engine | Role | Primary Tech |
+|--------|------|--------------|
+| **Core (Web)** | UI, API, Hooks | Next.js (Node.js 20+) |
+| **Worker (AI)** | Sync, OCR, AI, Messaging | Python 3.12+ |
+| **Bridge** | JSON IPC / Redis | Redis (BullMQ / Python-RQ) |
+
+### Marketing Sync Architecture 🔄
+
+This flow describes how marketing data is synced from external APIs to the local JSON cache for high-performance retrieval.
+
+```mermaid
+graph TD
+    FB[Facebook Marketing API] -->|Bulk Fetch| PY[marketing_sync.py]
+    PY -->|SQL Upsert| DB[(PostgreSQL)]
+    PY -->|Trigger| API[Next.js API sync]
+    API -->|Queue Job| BQ[BullMQ / Redis]
+    BQ -->|Process| WK[cacheSyncWorker.js]
+    WK -->|Read| DB
+    WK -->|Write| JSON[Local JSON Cache]
+    UI[Dashboard UI] -->|Direct Read| JSON
+```
+
+---
+
+## Core Data Flow
+
+```mermaid
+flowchart LR
+    subgraph Input["📥 Input"]
+        REG["Registration Modal"]
+        STORE["Store / Checkout"]
+        TOPUP["Wallet Top-up"]
+        FBW["Facebook Webhook"]
+    end
+
+    subgraph Core["💾 Core Data"]
+        PROFILE["Customer Profile"]
+        WALLET["Wallet"]
+        INV["Inventory / Cart"]
+        TL["Timeline / Chat"]
+    end
+
+    subgraph Output["📊 Output"]
+        CARD["Customer Card"]
+        ANALYTICS["Analytics Dashboard"]
+        DASH["Executive Dashboard"]
+    end
+
+    REG -->|"Creates"| PROFILE
+    REG -->|"Assigns"| WALLET
+    STORE -->|"Adds Items"| INV
+    STORE -->|"Logs Order"| TL
+    STORE -->|"Updates Spend"| PROFILE
+    TOPUP -->|"Credits"| WALLET
+    TOPUP -->|"Logs Transaction"| TL
+    FBW -->|"Sync Chat"| TL
+
+    PROFILE --> CARD
+    WALLET --> CARD
+    INV --> CARD
+    TL --> CARD
+
+    PROFILE --> ANALYTICS
+    TL --> ANALYTICS
+    INV --> DASH
+```
+
+---
+
+## Core Modules
+
+| Module | Responsibility | Tech Stack |
+|--------|----------------|------------|
+| **Customer 360** | Profile, Wallet, Inventory, Intelligence, Timeline | `CustomerCard.js` |
+| **Facebook Ads** | Real-time Ad Monitoring, Budget Tracking, AI Insights | `FacebookAds.js` |
+| **Analytics** | 8-Tab Dashboard (Sales, CLV, Funnel, ROI) | `Analytics.js` |
+| **Store & Cart** | Persistence, Course & Package Sales (Database-First) | `StoreGrid.js` / Prisma |
+| **Knowledge Base**| Semantic Search (RAG) & AI Context | Python / Gemini |
+| **Observability** | Error Logging & Auditing | `errorLogger.js` |
+
+---
+
+## Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    CUSTOMER ||--|| PROFILE : has
+    CUSTOMER ||--|| WALLET : owns
+    CUSTOMER ||--o{ INVENTORY : contains
+    CUSTOMER ||--o{ TIMELINE : logs
+    CUSTOMER ||--o{ CART_ITEM : "stores items"
+    
+    INVENTORY ||--o{ COUPON : stores
+    INVENTORY ||--o{ COURSE_CREDIT : stores
+    
+    TIMELINE ||--o{ ORDER : records
+    TIMELINE ||--o{ TOPUP : records
+    TIMELINE ||--o{ MESSAGE : records
+    
+    CATALOG ||--o{ PRODUCT : lists
+    CATALOG ||--o{ PACKAGE : lists
+    PACKAGE ||--o{ PRODUCT : includes
+    
+    EMPLOYEE ||--o{ CUSTOMER : manages
+
+    CUSTOMER {
+        string customer_id PK
+        string member_id UK
+    }
+    CART_ITEM {
+        int quantity
+    }
+    PROFILE {
+        string first_name
+        string last_name
+        string membership_tier
+    }
+    WALLET {
+        float balance
+        int points
+    }
+```
+
+---
+
+## 🛡️ Data Backup & Safety
+
+The system implements automated backups during critical maintenance operations:
+
+| Feature | Mechanism | Destination |
+|---------|-----------|-------------|
+| **Customer Backup** | Automatic snapshot before ID refactoring | `customer_backup_[TIMESTAMP]/` |
+| **ID Mapping** | Tracks old (FB/Line) IDs to new (TVS-CUS) IDs | `docs/customer_id_mapping.json` |
+
+---
+
+## ID System (Standard V7)
+
+| ID Type | Format | Example | Purpose |
+|---------|--------|---------|---------|
+| **Customer ID** | `TVS-CUS-[CH]-[YY]-[SEQ]` | `TVS-CUS-FB-26-0001` | **Immutable** Academy Primary Key |
+| **Member ID** | `MEM-YYYY-XXXX` | `MEM-2024-0001` | Customer-Facing ID |
+| **Order ID** | `ORD-[DATE]-[NUM]` | `ORD-20240217-001` | Sales of Courses/Packages |
+| **Transaction ID** | `TRX-[DATE]-[ID]` | `TRX-20240217-W01` | Payments, Wallet Top-ups |
+| **Course ID** | `TVS-[GRP]-[FC]-[QUAL]-[SEQ]` | `TVS-JP-2FC-HC-01` | Product Catalog |
+
+---
+
+## 📂 Project Structure
+
+### Root Directory (`data_hub/`)
 | Path | Description |
 |------|-------------|
-| `crm-app/` | Main application source code |
+| `crm-app/` | Main Next.js application source code |
 | `node_env/` | **Portable Node.js Runtime** (Do not delete) |
-| `MES/` | Future Spec: Manufacturing Execution System |
-| `customer/` | Customer database (JSON) |
-| `knowledge/` | AI Knowledge Base documents |
-| `logs/` | System & Error logs |
-| `รันระบบ_NextJS.command` | One-click Startup script |
+| `customer/` | Account Data & Timelines (Legacy JSON) |
+| `employee/` | Staff Profiles & Activity Logs |
+| `marketing/` | Ad Performance Logs & Compliance Data |
+| `products/` | Granular Product JSON files (Source of Truth for DB) |
+| `catalog.json.bak` | Legacy Master Products & Packages (Phased Out) |
+| `รันระบบ_NextJS.command`| One-click Startup script |
 
-## 📂 Internal App Structure (`crm-app/`)
+### App Directory (`crm-app/`)
 | Path | Description |
 |------|-------------|
-| `src/app/api/` | Node.js API Routes (Entry points) |
-| `src/workers/python/` | Core logic, AI Processing, Knowledge Base |
-| `src/lib/` | Shared utilities (DB, Queue, Logging) |
-| `prisma/` | Database schema and migrations |
-| `prisma/` | Database schema (Core + Ad Data) |
-| `marketing/config/` | Ad mapping configurations |
-| `marketing/logs/` | Raw JSON logs from Facebook |
-| `docs/adr/` | Architectural Decision Records |
+| `src/app/api/` | API Routes (Marketing, Customers, Cart) |
+| `src/workers/` | Background Workers (Node Sync & Python AI) |
+| `src/lib/` | Shared utilities (DB Adapter, Cache Sync) |
+| `prisma/` | Database schema (PostgreSQL) |
+| `cache/` | Local JSON Cache for high performance |
+
+---
 
 ## 🛡️ Observability & Reliability
-The system implements a multi-layer logging strategy for maximum "Self-Healing" and traceability:
+
+The system implements a multi-layer logging strategy for traceability:
 
 | Layer | Path | Purpose |
 |-------|------|---------|
-| **Error Logs** | `logs/errors_*.jsonl` | Technical failures (HTTP, DB, Tool errors). |
+| **Error Logs** | `logs/errors_*.jsonl` | Technical failures. |
 | **Audit Logs** | `logs/audit.jsonl` | Critical business actions (Records who did what). |
-| **Marketing Logs** | `marketing/logs/` | Hourly snapshots of Ad performance for ROI analysis. |
-| **Task Buffer** | `docs/tasks/` | Sliding window of the last 100 AI task executions. |
-| **Incidents** | `docs/incidents/` | Detailed "Post-Mortems" for logic or system failures. |
-| **Incident Index** | `docs/incident_log.md` | Human-readable index of all major system events. |
+| **Compliance** | `marketing/logs/compliance/` | PDPA & Data Consent logs. |
+| **Forensic** | `marketing/logs/forensic/` | Tamper-proof signatures for log integrity. |
+| **Incidents** | `docs/incidents/` | Detailed "Post-Mortems" for failures. |
 
-## 🔄 Core Data Flows
-1.  **Inbound Chat**: Facebook Webhook -> `eventProducer.js` -> Redis -> `event_processor.py` -> Gemini AI -> Facebook Send API.
-2.  **Order Processing**: Dashboard -> `db.js` Adapter -> (Prisma/PostgreSQL or JSON) -> Timeline Sync.
-3.  **Knowledge Base (RAG)**: `knowledge_ingest.py` (Embeddings) -> `vector_index.json` -> `knowledge_base.py` (Search) -> AI Context.
-4.  **Incident Lifecycle**: Anomaly Detected -> `incidentManager.js` -> Escalate Task context -> Generate MD Report -> Append to Master Log.
+---
 
-## 🛡️ Quality Assurance
-1. **Logic Integrity**: `integrity_check.py` scans for attribution and business logic anomalies.
-2. **Task Preservation**: Tasks involved in incidents are moved to `docs/tasks/permanent/` to prevent auto-deletion.
+## Running the Application
+
+```bash
+cd /Users/ideab/Desktop/data_hub/crm-app
+npm run dev
+# Access at http://localhost:3000
+# Login: admin@vschool.co.th / admin123
+```

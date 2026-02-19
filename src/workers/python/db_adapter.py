@@ -177,28 +177,143 @@ def save_chat_to_cache_json(conversation_id, messages):
     return False
 
 # ═══════════════════════════════════════════════════════════
-#  TASKS
+#  MARKETING & ADS
 # ═══════════════════════════════════════════════════════════
 
-def create_task(customer_id, title, description, due_date=None, priority="NORMAL"):
+def upsert_marketing_data(data):
     """
-    Creates a follow-up task for a customer.
+    Bulk upsert marketing data (campaigns, adsets, creatives, ads).
     """
-    if DB_ADAPTER == 'prisma':
-        conn = get_db_conn()
-        if conn:
-            try:
-                cur = conn.cursor()
-                # Simple insert into 'tasks' table
-                # Assuming columns match the Prisma schema: id, customerId, title, description, dueDate, status, priority, createdAt
-                cur.execute("""
-                    INSERT INTO "Task" ("customerId", "title", "description", "dueDate", "status", "priority", "createdAt", "updatedAt")
-                    VALUES (%s, %s, %s, %s, 'PENDING', %s, NOW(), NOW())
-                """, (customer_id, title, description, due_date, priority))
-                return True
-            except Exception as e:
-                print(f"[DB/Python] SQL Task Error: {e}")
+    if DB_ADAPTER != 'prisma': return True
+    
+    import uuid
+    conn = get_db_conn()
+    if not conn: return False
+    
+    try:
+        cur = conn.cursor()
+        
+        # 1. Campaigns
+        for c in data.get('campaigns', []):
+            cur.execute("""
+                INSERT INTO campaigns (id, name, status, objective, start_date, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, NOW(), NOW())
+                ON CONFLICT (id) DO UPDATE SET
+                    name = EXCLUDED.name, status = EXCLUDED.status, 
+                    objective = EXCLUDED.objective, start_date = EXCLUDED.start_date, updated_at = NOW();
+            """, (c.get('id'), c.get('name'), c.get('status'), c.get('objective'), c.get('start_time')))
 
-    # JSON Fallback: In JSON mode, we just log it as the primary focus is the profile.
-    print(f"[DB/JSON] (Simulation) Created Task for {customer_id}: {title}")
-    return True
+        # 2. AdSets
+        for a in data.get('adsets', []):
+            cur.execute("SELECT id FROM ad_sets WHERE ad_set_id = %s", (a.get('id'),))
+            res = cur.fetchone()
+            if res:
+                cur.execute("""
+                    UPDATE ad_sets SET name = %s, status = %s, daily_budget = %s, targeting = %s, updated_at = NOW()
+                    WHERE ad_set_id = %s
+                """, (a.get('name'), a.get('status'), int(a.get('daily_budget') or 0)/100, json.dumps(a.get('targeting') or {}), a.get('id')))
+            else:
+                cur.execute("""
+                    INSERT INTO ad_sets (id, ad_set_id, campaign_id, name, status, daily_budget, targeting, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                """, (f"as_{uuid.uuid4().hex[:8]}", a.get('id'), a.get('campaign_id'), a.get('name'), a.get('status'), int(a.get('daily_budget') or 0)/100, json.dumps(a.get('targeting') or {})))
+
+        # 3. Creatives
+        for c in data.get('creatives', []):
+            cur.execute("""
+                INSERT INTO ad_creatives (id, name, body, headline, image_url, video_url, call_to_action, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                ON CONFLICT (id) DO UPDATE SET
+                    name = EXCLUDED.name, body = EXCLUDED.body, headline = EXCLUDED.headline,
+                    image_url = EXCLUDED.image_url, video_url = EXCLUDED.video_url, updated_at = NOW();
+            """, (c.get('id'), c.get('name'), c.get('body'), c.get('title'), c.get('image_url') or c.get('thumbnail_url'), c.get('video_url'), c.get('call_to_action_type')))
+
+        # 4. Ads
+        for ad in data.get('ads', []):
+            cur.execute("SELECT id FROM ad_sets WHERE ad_set_id = %s", (ad.get('adset_id'),))
+            res_set = cur.fetchone()
+            if not res_set: continue
+            
+            cur.execute("SELECT id FROM ads WHERE ad_id = %s", (ad.get('id'),))
+            res_ad = cur.fetchone()
+            if res_ad:
+                cur.execute("""
+                    UPDATE ads SET name = %s, status = %s, ad_set_id = %s, creative_id = %s, updated_at = NOW()
+                    WHERE ad_id = %s
+                """, (ad.get('name'), ad.get('status'), res_set[0], ad.get('creative', {}).get('id'), ad.get('id')))
+            else:
+                cur.execute("""
+                    INSERT INTO ads (id, ad_id, name, status, ad_set_id, creative_id, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s, %s, %s, NOW(), NOW())
+                """, (f"ad_{uuid.uuid4().hex[:8]}", ad.get('id'), ad.get('name'), ad.get('status'), res_set[0], ad.get('creative', {}).get('id')))
+        
+        return True
+    except Exception as e:
+        print(f"[DB/Marketing] Error: {e}")
+        return False
+
+def upsert_ad_daily_metrics(metrics_list):
+    """
+    Insert daily metrics snapshot and update Ad aggregate counters.
+    """
+    if DB_ADAPTER != 'prisma': return True
+    conn = get_db_conn()
+    if not conn: return False
+    
+    try:
+        cur = conn.cursor()
+        for m in metrics_list:
+            # m: {ad_id, date, spend, impressions, clicks, leads, purchases}
+            cur.execute("""
+                INSERT INTO ad_daily_metrics (id, ad_id, date, spend, impressions, clicks, leads, purchases, created_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                ON CONFLICT (ad_id, date) DO UPDATE SET
+                    spend = EXCLUDED.spend, impressions = EXCLUDED.impressions, 
+                    clicks = EXCLUDED.clicks, leads = EXCLUDED.leads, purchases = EXCLUDED.purchases;
+            """, (f"adm_{int(time.time()*1000)}", m['ad_id'], m['date'], m['spend'], m['impressions'], m['clicks'], m['leads'], m['purchases']))
+            
+            # Update Ad snapshot (aggregate)
+            cur.execute("""
+                UPDATE ads SET 
+                    spend = (SELECT SUM(spend) FROM ad_daily_metrics WHERE ad_id = %s),
+                    impressions = (SELECT SUM(impressions) FROM ad_daily_metrics WHERE ad_id = %s),
+                    clicks = (SELECT SUM(clicks) FROM ad_daily_metrics WHERE ad_id = %s),
+                    updated_at = NOW()
+                WHERE ad_id = %s
+            """, (m['ad_id'], m['ad_id'], m['ad_id'], m['ad_id']))
+            
+        return True
+    except Exception as e:
+        print(f"[DB/Metrics] Error: {e}")
+        return False
+
+# ═══════════════════════════════════════════════════════════
+#  ASSETS
+# ═══════════════════════════════════════════════════════════
+
+def get_customer_assets(customer_id, asset_type='images'):
+    """
+    Returns list of asset file paths for a customer.
+    asset_type: 'images', 'videos', 'files'
+    """
+    if not os.path.exists(DATA_DIR): return []
+    
+    # Locate customer folder
+    target_folder = None
+    direct_folder = os.path.join(DATA_DIR, str(customer_id))
+    
+    if os.path.exists(direct_folder):
+        target_folder = direct_folder
+    else:
+        # Search for folder manually if ID is not direct match (e.g. standard ID vs PSID)
+        for folder in os.listdir(DATA_DIR):
+            if folder == str(customer_id) or folder.endswith(f"-{customer_id}"):
+                 target_folder = os.path.join(DATA_DIR, folder)
+                 break
+    
+    if not target_folder: return []
+    
+    assets_path = os.path.join(target_folder, 'assets', asset_type)
+    if not os.path.exists(assets_path): return []
+    
+    return [os.path.join(assets_path, f) for f in os.listdir(assets_path) if not f.startswith('.')]

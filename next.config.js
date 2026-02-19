@@ -7,6 +7,9 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
+    experimental: {
+        serverComponentsExternalPackages: ['pg', '@prisma/adapter-pg'],
+    },
 
     // Trailing slash for static hosting compatibility
     // trailingSlash: true,

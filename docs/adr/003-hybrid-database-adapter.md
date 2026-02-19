@@ -8,7 +8,7 @@ We implemented a **Strategy Pattern** in `src/lib/db.js` that supports two adapt
 1.  **JSON Adapter**: The default, using the file system as the primary store.
 2.  **Prisma Adapter**: Used for PostgreSQL (Local/Prod) or Supabase.
 
-The system determines which adapter to use based on the `DB_ADAPTER` environment variable.
+The system determines which adapter to use based on the `DB_ADAPTER` environment variable. To resolve environment-specific initialization issues, the Prisma adapter has been enhanced to use `@prisma/adapter-pg` (PostgreSQL Driver Adapter).
 
 ## Consequences
 - **Pros**: Maintains "instant start" capability for new developers while providing a path to "Production Grade" reliability.

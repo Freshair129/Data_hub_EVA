@@ -1,9 +1,0 @@
-[
-    {
-        "id": "u001",
-        "email": "admin@vschool.co.th",
-        "password": "admin123",
-        "name": "Admin User",
-        "role": "admin"
-    }
-]

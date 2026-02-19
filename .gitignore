@@ -31,3 +31,6 @@ next-env.d.ts
 
 # OS
 .DS_Store
+
+# Local runtime cache (data & assets)
+cache/

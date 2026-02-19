@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  engineType = "library"
 }
 
 // ───────────────────────────────────────────────────────────
@@ -62,6 +63,7 @@ model Customer {
   inventory     InventoryItem[]
   conversations Conversation[]
   tasks         Task[]
+  cart          CartItem[]
   
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt      @map("updated_at")
@@ -259,6 +261,8 @@ model Product {
   metadata      Json?    @default("{}")
   
   isActive      Boolean  @default(true) @map("is_active")
+  
+  cartItems     CartItem[]
   
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt      @map("updated_at")
@@ -463,6 +467,23 @@ model Task {
   @@map("tasks")
 }
 
+model CartItem {
+  id            String   @id @default(cuid())
+  customerId    String   @map("customer_id")
+  customer      Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  
+  productId     String   @map("product_id")
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  quantity      Int      @default(1)
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt      @map("updated_at")
+  
+  @@unique([customerId, productId])
+  @@map("cart_items")
+}
+
 // ───────────────────────────────────────────────────────────
 // AUDIT LOG
 // ───────────────────────────────────────────────────────────
@@ -483,58 +504,3 @@ model AuditLog {
   @@map("audit_logs")
 }
 
-// ───────────────────────────────────────────────────────────
-// SYSTEM HEALTH & ERROR TRACKING
-// ───────────────────────────────────────────────────────────
-
-model ErrorLog {
-  id          String   @id @default(cuid())
-  errorId     String   @unique @map("error_id")          // e.g. "ERR-20240218-A1B2"
-  timestamp   DateTime @default(now())
-  severity    String   @default("ERROR")                 // INFO, WARN, ERROR, CRITICAL
-  category    String   // e.g. "webhook", "worker", "payment"
-  
-  message     String
-  stackTrace  String?  @map("stack_trace")
-  context     Json?    @default("{}")                    // User ID, Request Body, etc.
-  tags        String[]                                   // ["#timeout", "#facebook"]
-  
-  // Resolution Tracking
-  status        String   @default("OPEN")                // OPEN, INVESTIGATING, RESOLVED, IGNORED
-  resolutionId  String?  @map("resolution_id")
-  resolution    ErrorSolution? @relation(fields: [resolutionId], references: [id])
-  
-  // Fix Quality (User Request)
-  resolutionQuality String? @map("resolution_quality") // FULL_FIX, WORKAROUND, HARDCODED, NONE
-  
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt      @map("updated_at")
-  
-  @@index([category, severity])
-  @@index([errorId])
-  @@map("error_logs")
-}
-
-model ErrorSolution {
-  id            String   @id @default(cuid())
-  title         String   // e.g. "Fix regex for Thai phone numbers"
-  content       String   // Markdown description of the fix
-  
-  // Linking to provenance
-  relatedErrorPattern String? @map("related_error_pattern") // Regex or error message substring to auto-suggest this solution
-  
-  // Linking to Changelog/Code
-  gitCommitHash String?  @map("git_commit_hash")
-  changelogId   String?  @map("changelog_id")          // Link to external changelog or internal note ID
-  
-  // Statistics
-  timesApplied  Int      @default(0) @map("times_applied")
-  
-  // Relations
-  resolvedErrors ErrorLog[]
-  
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt      @map("updated_at")
-  
-  @@map("error_solutions")
-}

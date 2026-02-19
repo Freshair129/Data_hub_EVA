@@ -25,7 +25,7 @@ export default function FacebookChat({ onViewCustomer, initialCustomerId }) {
     useEffect(() => {
         const loadCatalog = async () => {
             try {
-                const res = await fetch('/data/catalog.json');
+                const res = await fetch('/api/catalog');
                 const data = await res.json();
                 setCatalog(data);
             } catch (err) {
@@ -241,7 +241,7 @@ export default function FacebookChat({ onViewCustomer, initialCustomerId }) {
                 alert('Product added to store!');
                 setDiscoveredProducts(prev => prev.map(p => p.product_name === product.product_name ? { ...p, exists: true } : p));
                 // Reload catalog
-                const catRes = await fetch('/data/catalog.json');
+                const catRes = await fetch('/api/catalog');
                 const catData = await catRes.json();
                 setCatalog(catData);
             } else {

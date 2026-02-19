@@ -121,7 +121,7 @@ export default function Home() {
 
     async function loadProducts() {
         try {
-            const res = await fetch('/data/catalog.json');
+            const res = await fetch('/api/catalog');
             const catalog = await res.json();
             const allProducts = [
                 ...catalog.packages.map(p => ({ ...p, type: 'bundle' })),

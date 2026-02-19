@@ -1,19 +1,22 @@
 """
-Excel & Google Sheets Data Service
-───────────────────────────────────
+Excel, Google Sheets & Facebook Ads Data Service
+────────────────────────────────────────────────
 Handles:
   1. Import data FROM Excel files
   2. Import data FROM Google Sheets
   3. Export data TO Excel WITH formulas
   4. Export data TO Google Sheets
+  5. Fetch Ad Data FROM Facebook Graph API
 
-Dependencies: openpyxl, xlsxwriter, gspread, google-auth
+Dependencies: openpyxl, xlsxwriter, gspread, google-auth, facebook-business
 """
 
 import os
 import json
 import sys
+import uuid # For generating CUID/UUIDs
 from datetime import datetime, date
+from db_adapter import get_db_conn # Import for SQL access
 
 # ─── Check Optional Dependencies ───────────────────────────
 try:
@@ -40,6 +43,17 @@ try:
     HAS_PANDAS = True
 except ImportError:
     HAS_PANDAS = False
+
+try:
+    from facebook_business.api import FacebookAdsApi
+    from facebook_business.adobjects.adaccount import AdAccount
+    from facebook_business.adobjects.campaign import Campaign
+    from facebook_business.adobjects.adset import AdSet
+    from facebook_business.adobjects.ad import Ad
+    from facebook_business.adobjects.adcreative import AdCreative
+    HAS_FB_SDK = True
+except ImportError:
+    HAS_FB_SDK = False
 
 
 # ═══════════════════════════════════════════════════════════
@@ -378,6 +392,7 @@ def main():
       python data_service.py import-excel <file_path>
       python data_service.py import-gsheets <spreadsheet_id> [sheet_name]
       python data_service.py export-gsheets <spreadsheet_id> [sheet_name]
+      python data_service.py fetch-ads <ad_account_id> [output.json]
     """
     if len(sys.argv) < 2:
         print(__doc__)
@@ -409,8 +424,267 @@ def main():
         flat = [flatten_customer(c) for c in customers]
         export_to_google_sheets(flat, sheet_id, sheet_name)
     
+    elif command == 'fetch-ads':
+        ad_account_id = sys.argv[2]
+        output_file = sys.argv[3] if len(sys.argv) > 3 else f"ads_data_{date.today().isoformat()}.json"
+        
+        data = fetch_facebook_ads(ad_account_id)
+        
+        if data:
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            print(f"💾 Saved Ad Data to: {output_file}")
+            
+            # Save to Database
+            save_ad_data_to_db(data)
+    
     else:
         print(f"Unknown command: {command}")
+
+
+# ═══════════════════════════════════════════════════════════
+#  FACEBOOK ADS DATA FETCHING
+# ═══════════════════════════════════════════════════════════
+
+def fetch_facebook_ads(ad_account_id):
+    """
+    Fetch Campaigns, AdSets, Ads, and Creatives from Facebook Marketing API.
+    Returns a dictionary with the data structure.
+    """
+    if not HAS_FB_SDK:
+        raise ImportError("facebook-business is required. pip install facebook-business")
+
+    # 1. Configuration
+    access_token = os.getenv('FB_PAGE_ACCESS_TOKEN') # Using Page Token for simplicity (ensure permissions)
+    app_id = os.getenv('FB_APP_ID')
+    app_secret = os.getenv('FB_APP_SECRET')
+
+    if not access_token:
+        print("[Error] FB_PAGE_ACCESS_TOKEN is missing.")
+        return None
+    
+    # 2. Initialize API
+    try:
+        FacebookAdsApi.init(access_token=access_token)
+    except Exception as e:
+        print(f"[Error] Failed to init Facebook API: {e}")
+        return None
+
+    # Ensure account ID starts with 'act_'
+    account_id = f"act_{ad_account_id}" if not ad_account_id.startswith("act_") else ad_account_id
+    account = AdAccount(account_id)
+    
+    data = {
+        "campaigns": [],
+        "adsets": [],
+        "ads": [],
+        "creatives": []
+    }
+
+    try:
+        print(f"🔄 Fetching data for Ad Account: {account_id}...")
+
+        # 3. Fetch Campaigns
+        campaign_fields = [
+            Campaign.Field.id,
+            Campaign.Field.name,
+            Campaign.Field.status,
+            Campaign.Field.objective,
+            Campaign.Field.start_time,
+            Campaign.Field.stop_time,
+        ]
+        campaigns = account.get_campaigns(fields=campaign_fields)
+        data["campaigns"] = [c.export_all_data() for c in campaigns]
+        print(f"✅ Found {len(data['campaigns'])} Campaigns")
+
+        # 4. Fetch AdSets
+        adset_fields = [
+            AdSet.Field.id,
+            AdSet.Field.name,
+            AdSet.Field.status,
+            AdSet.Field.daily_budget,
+            AdSet.Field.campaign_id,
+            AdSet.Field.targeting,
+        ]
+        adsets = account.get_ad_sets(fields=adset_fields)
+        data["adsets"] = [a.export_all_data() for a in adsets]
+        print(f"✅ Found {len(data['adsets'])} AdSets")
+
+        # 5. Fetch Ads
+        ad_fields = [
+            Ad.Field.id,
+            Ad.Field.name,
+            Ad.Field.status,
+            Ad.Field.adset_id,
+            Ad.Field.creative,
+        ]
+        ads = account.get_ads(fields=ad_fields)
+        data["ads"] = [a.export_all_data() for a in ads]
+        print(f"✅ Found {len(data['ads'])} Ads")
+
+        # 6. Fetch Creatives
+        creative_fields = [
+            AdCreative.Field.id,
+            AdCreative.Field.name,
+            AdCreative.Field.body,
+            AdCreative.Field.title,
+            AdCreative.Field.image_url,
+            AdCreative.Field.thumbnail_url,
+            AdCreative.Field.call_to_action_type,
+        ]
+        # Fetching creatives from the account to ensure we get all of them, or could iterate ads.
+        # Account level fetch is better for bulk.
+        creatives = account.get_ad_creatives(fields=creative_fields, params={'limit': 100})
+        data["creatives"] = [c.export_all_data() for c in creatives]
+        print(f"✅ Found {len(data['creatives'])} Creatives")
+
+        return data
+
+    except Exception as e:
+        print(f"[Error] Failed to fetch Facebook Ads data: {e}")
+        return None
+
+
+def save_ad_data_to_db(data):
+    """
+    Saves the fetched Ad Data dict to PostgreSQL using db_adapter connection.
+    Upserts AdAccount, Campaign, AdSet, AdCreative, Ad.
+    """
+    if not data: return False
+    
+    conn = get_db_conn()
+    if not conn:
+        print("[Error] No DB Connection available (DB_ADAPTER != prisma?)")
+        return False
+        
+    try:
+        cur = conn.cursor()
+        
+        # 1. UPSERT AdAccount (We assume current account for now, or extract from data if available)
+        # For this script, we passed ad_account_id to fetch, we should probably pass it here too or just handle it.
+        # Ideally, we upsert campaigns first and link them.
+        
+        # 2. UPSERT Campaigns
+        # Schema: id, name, status, objective, startDate, endDate, createdAt, updatedAt
+        print(f"💾 Saving {len(data['campaigns'])} Campaigns...")
+        for c in data['campaigns']:
+            cur.execute("""
+                INSERT INTO campaigns (id, name, status, objective, start_date, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, NOW(), NOW())
+                ON CONFLICT (id) DO UPDATE SET
+                    name = EXCLUDED.name,
+                    status = EXCLUDED.status,
+                    objective = EXCLUDED.objective,
+                    start_date = EXCLUDED.start_date,
+                    updated_at = NOW();
+            """, (
+                c.get('id'),
+                c.get('name'),
+                c.get('status'),
+                c.get('objective'),
+                c.get('start_time') # FB returns ISO string or None
+            ))
+            
+        # 3. UPSERT AdSets
+        # Schema: id, adSetId, name, status, campaignId, dailyBudget, targeting
+        print(f"💾 Saving {len(data['adsets'])} AdSets...")
+        for a in data['adsets']:
+            # Try to find existing by adSetId
+            cur.execute("SELECT id FROM ad_sets WHERE ad_set_id = %s", (a.get('id'),))
+            res = cur.fetchone()
+            
+            if res:
+                # Update
+                cur.execute("""
+                    UPDATE ad_sets SET 
+                        name = %s, status = %s, daily_budget = %s, targeting = %s, updated_at = NOW()
+                    WHERE ad_set_id = %s
+                """, (
+                    a.get('name'), a.get('status'), int(a.get('daily_budget') or 0)/100, 
+                    json.dumps(a.get('targeting') or {}), a.get('id')
+                ))
+            else:
+                # Insert
+                new_id = f"c{uuid.uuid4().hex}" # Pseudo-CUID
+                cur.execute("""
+                    INSERT INTO ad_sets (id, ad_set_id, campaign_id, name, status, daily_budget, targeting, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                """, (
+                    new_id, a.get('id'), a.get('campaign_id'), 
+                    a.get('name'), a.get('status'), int(a.get('daily_budget') or 0)/100,
+                    json.dumps(a.get('targeting') or {})
+                ))
+
+        # 4. UPSERT Creatives
+        # Schema: id, name, body, headline, imageUrl, videoUrl, callToAction
+        print(f"💾 Saving {len(data['creatives'])} Creatives...")
+        for c in data['creatives']:
+            cur.execute("""
+                INSERT INTO ad_creatives (id, name, body, headline, image_url, video_url, call_to_action, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                ON CONFLICT (id) DO UPDATE SET
+                    name = EXCLUDED.name,
+                    body = EXCLUDED.body,
+                    headline = EXCLUDED.headline,
+                    image_url = EXCLUDED.image_url,
+                    video_url = EXCLUDED.video_url,
+                    call_to_action = EXCLUDED.call_to_action,
+                    updated_at = NOW();
+            """, (
+                c.get('id'), # FB Creative ID as Primary Key
+                c.get('name'),
+                c.get('body'),
+                c.get('title'),
+                c.get('image_url') or c.get('thumbnail_url'),
+                c.get('video_url'), 
+                c.get('call_to_action_type')
+            ))
+
+        # 5. UPSERT Ads
+        # Schema: id, adId, name, status, adSetId, creativeId, spend, etc.
+        print(f"💾 Saving {len(data['ads'])} Ads...")
+        for ad in data['ads']:
+            # Lookup AdSet CUID
+            cur.execute("SELECT id FROM ad_sets WHERE ad_set_id = %s", (ad.get('adset_id'),))
+            res_set = cur.fetchone()
+            if not res_set:
+                print(f"[Warn] AdSet {ad.get('adset_id')} not found for Ad {ad.get('name')}")
+                continue
+            real_adset_id = res_set[0]
+            
+            # Lookup Creative ID
+            creative_fb_id = ad.get('creative', {}).get('id')
+            
+            # Upsert Ad
+            cur.execute("SELECT id FROM ads WHERE ad_id = %s", (ad.get('id'),))
+            res_ad = cur.fetchone()
+            
+            if res_ad:
+                cur.execute("""
+                    UPDATE ads SET 
+                        name = %s, status = %s, ad_set_id = %s, creative_id = %s, updated_at = NOW()
+                    WHERE ad_id = %s
+                """, (
+                    ad.get('name'), ad.get('status'), real_adset_id, creative_fb_id, ad.get('id')
+                ))
+            else:
+                new_ad_uuid = f"ad{uuid.uuid4().hex}"
+                cur.execute("""
+                    INSERT INTO ads (id, ad_id, name, status, ad_set_id, creative_id, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s, %s, %s, NOW(), NOW())
+                """, (
+                    new_ad_uuid, ad.get('id'), ad.get('name'), ad.get('status'), 
+                    real_adset_id, creative_fb_id
+                ))
+        
+        print("✅ Database Population Complete!")
+
+    except Exception as e:
+        print(f"[DB/Error] {e}")
+        return False
+
+    return True
+
 
 
 def load_all_customers_json():
